@@ -1,0 +1,9 @@
+services:
+  web:
+    image: nginx:alpine
+    container_name: kenetg_apache
+    ports:
+      - "8080:80"                # http://localhost:8080
+    volumes:
+      - ../../web:/usr/share/nginx/html:ro
+    restart: unless-stopped

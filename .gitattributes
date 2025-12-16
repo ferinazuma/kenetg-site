@@ -1,0 +1,22 @@
+# =========================
+# Normalizar textos a LF (evita avisos CRLF/LF en Windows)
+# =========================
+*.html text eol=lf
+*.css  text eol=lf
+*.js   text eol=lf
+*.json text eol=lf
+*.md   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.txt  text eol=lf
+# =========================
+# SVG como texto (se mantiene diffeable) con LF
+# =========================
+*.svg  text eol=lf
+# =========================
+# Binarios sin normalizar
+# =========================
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.webm filter=lfs diff=lfs merge=lfs -text

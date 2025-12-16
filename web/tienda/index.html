@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>KenetG — Tienda</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Tienda oficial de KenetG: catalogo demo de drops y productos de la comunidad."
+  />
+  <link rel="canonical" href="https://kenetg.com/tienda/" />
+  <meta property="og:title" content="KenetG | Tienda" />
+  <meta
+    property="og:description"
+    content="Tienda oficial de KenetG: catalogo demo de drops y productos de la comunidad."
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://kenetg.com/tienda/" />
+  <meta property="og:image" content="https://kenetg.com/assets/img/kg-logo.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="KenetG | Tienda" />
+  <meta
+    name="twitter:description"
+    content="Tienda oficial de KenetG: catalogo demo de drops y productos de la comunidad."
+  />
+  <meta name="twitter:image" content="https://kenetg.com/assets/img/kg-logo.png" />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+</head>
+
+<body>
+  <!-- =======================================================
+       1) VIDEO DE FONDO (IGUAL QUE INICIO)
+       ======================================================= -->
+  <div class="kg-bg-video-wrap">
+    <video
+      class="kg-bg-video"
+      src="/assets/media/fondo-web.webm"
+      autoplay
+      muted
+      loop
+      playsinline
+    ></video>
+  </div>
+
+  <!-- =======================================================
+       2) CONTENEDOR PRINCIPAL (encima del vídeo)
+       ======================================================= -->
+  <div class="kg-page">
+
+    <!-- =======================================================
+         3) HEADER FIJO (MISMO HEADER QUE INICIO)
+         ======================================================= -->
+    <header class="kg-header">
+      <a class="kg-logo-wrap" href="/" aria-label="Ir a Inicio">
+        <div class="kg-logo-orbit">
+          <img src="/assets/img/kg-logo.png" alt="Logo KenetG" class="kg-logo" />
+        </div>
+        <span class="kg-brand">Kenet<span class="kg-brand-highlight">G</span></span>
+      </a>
+      <!-- NAV (igual que inicio) -->
+      <nav class="kg-nav">
+        <ul class="kg-nav-list">
+          <!-- INICIO -->
+          <li class="kg-nav-item">
+            <a href="/" class="kg-nav-link kg-nav-link--pill">Inicio</a>
+          </li>
+
+          <!-- REDES -->
+          <li class="kg-nav-item">
+            <a href="/redes/" class="kg-nav-link kg-nav-link--pill">Redes</a>
+          </li>
+
+          <!-- TIENDA (activa) -->
+          <li class="kg-nav-item kg-nav-item--has-sub">
+            <a href="/tienda/" class="kg-nav-link kg-nav-link--pill kg-nav-link--active">
+              Tienda
+            </a>
+
+            <ul class="kg-submenu">
+              <li>
+                <a href="/tienda/" class="kg-submenu-link">Ver catalogo</a>
+              </li>
+              <li>
+                <span class="kg-submenu-link kg-submenu-link--disabled">
+                  Modulos extra (proximamente)
+                </span>
+              </li>
+            </ul>
+          </li>
+
+          <!-- BLOG -->
+          <li class="kg-nav-item kg-nav-item--has-sub">
+            <span class="kg-nav-link kg-nav-link--pill kg-nav-link--disabled">
+              Blog (proximamente, deshabilitado)
+            </span>
+
+            <ul class="kg-submenu">
+              <li>
+                <span class="kg-submenu-link kg-submenu-link--disabled">
+                  Articulos en camino
+                </span>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- =======================================================
+         4) MAIN
+         ======================================================= -->
+    <main>
+
+      <!-- =====================================================
+           4.1) HERO TIENDA (PRELIMINAR)
+           ===================================================== -->
+      <section class="kg-hero">
+        <div class="kg-hero-content">
+          <h1>Tienda oficial de <span>KenetG</span></h1>
+          <p>
+            Página preliminar (demo). Aquí se mostrarán los drops y productos de la comunidad.
+            Por ahora, solo hay un artículo de prueba.
+          </p>
+          <button class="kg-btn" onclick="scrollToStore()">
+            Ver camiseta extensible V1
+          </button>
+        </div>
+      </section>
+
+      <!-- =====================================================
+           4.2) CATÁLOGO (DEMO)
+           ===================================================== -->
+      <section id="tienda" class="kg-store">
+        <header class="kg-store-header">
+          <h2>Catálogo</h2>
+          <p>
+            Primer artículo de prueba: <strong>Camiseta extensible V1</strong> (demo visual, sin compra real).
+          </p>
+        </header>
+
+          <div class="kg-products-grid kg-products-grid--catalog">
+
+            <!-- PRODUCTO 1 — REAL (DEMO) -->
+            <article class="kg-product-tall">
+              <div class="kg-product-tall-badge">DEMO</div>
+
+              <div class="kg-product-tall-media">
+                <!-- aquí irá la imagen del modelo en el futuro -->
+                <span class="kg-product-tall-media-ph">Imagen modelo</span>
+              </div>
+
+              <div class="kg-product-tall-content">
+                <h3 class="kg-product-tall-title">Camiseta extensible V1</h3>
+
+                <p class="kg-product-tall-desc">
+                  Camiseta negra estilo KenetG con detalles neón en azul y rosa. Primera versión de prueba
+                  para validar estética y estructura de la tienda.
+                </p>
+
+                <div class="kg-product-tall-meta">
+                  <span class="kg-product-tall-price">29,90 €</span>
+                  <span class="kg-product-tall-tagline">DEMO — SIN COMPRA REAL</span>
+                </div>
+
+                <div class="kg-product-tall-actions">
+                  <button class="kg-btn kg-btn--secondary" onclick="showDemoAlert()">Añadir al carrito (demo)</button>
+                  <button class="kg-btn-ghost" onclick="showDemoAlert()">Ver detalles</button>
+                </div>
+              </div>
+            </article>
+
+            <!-- PRODUCTOS PLACEHOLDER (VACÍOS) -->
+            <article class="kg-product-tall kg-product-tall--empty">
+              <div class="kg-product-tall-media">
+                <span class="kg-product-tall-media-ph">Imagen modelo</span>
+              </div>
+
+              <div class="kg-product-tall-content">
+                <h3 class="kg-product-tall-title">Próximamente</h3>
+                <p class="kg-product-tall-desc">Nuevo drop en preparación.</p>
+              </div>
+            </article>
+            <article class="kg-product-tall kg-product-tall--empty">
+              <div class="kg-product-tall-media">
+                <span class="kg-product-tall-media-ph">Imagen modelo</span>
+              </div>
+
+              <div class="kg-product-tall-content">
+                <h3 class="kg-product-tall-title">Próximamente</h3>
+                <p class="kg-product-tall-desc">Nuevo drop en preparación.</p>
+              </div>
+            </article>
+            <article class="kg-product-tall kg-product-tall--empty">
+              <div class="kg-product-tall-media">
+                <span class="kg-product-tall-media-ph">Imagen modelo</span>
+              </div>
+
+              <div class="kg-product-tall-content">
+                <h3 class="kg-product-tall-title">Próximamente</h3>
+                <p class="kg-product-tall-desc">Nuevo drop en preparación.</p>
+              </div>
+            </article>
+            <article class="kg-product-tall kg-product-tall--empty">
+              <div class="kg-product-tall-media">
+                <span class="kg-product-tall-media-ph">Imagen modelo</span>
+              </div>
+
+              <div class="kg-product-tall-content">
+                <h3 class="kg-product-tall-title">Próximamente</h3>
+                <p class="kg-product-tall-desc">Nuevo drop en preparación.</p>
+              </div>
+            </article>
+            <article class="kg-product-tall kg-product-tall--empty">
+              <div class="kg-product-tall-media">
+                <span class="kg-product-tall-media-ph">Imagen modelo</span>
+              </div>
+
+              <div class="kg-product-tall-content">
+                <h3 class="kg-product-tall-title">Próximamente</h3>
+                <p class="kg-product-tall-desc">Nuevo drop en preparación.</p>
+              </div>
+            </article>
+
+          </div>
+
+      </section>
+
+      <section class="kg-section">
+        <div class="kg-section-inner">
+          <div class="kg-geo-banner" id="kg-geo-banner">
+            <p>Quieres activar geolocalizacion para mejorar la experiencia? (opcional)</p>
+            <div class="kg-geo-banner-actions">
+              <button class="kg-btn" type="button" data-geo-allow>Permitir</button>
+              <button class="kg-btn-ghost" type="button" data-geo-decline>Ahora no</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- =======================================================
+         5) FOOTER
+         ======================================================= -->
+    <footer class="kg-footer">
+      <p>
+        Proyecto preliminar para <strong>KenetG</strong>. Esta tienda es una demo visual, sin pagos ni base de datos.
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- =======================================================
+       6) JS
+       ======================================================= -->
+  <script src="/assets/js/geo.js"></script>
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>

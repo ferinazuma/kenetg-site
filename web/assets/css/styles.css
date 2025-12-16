@@ -1,0 +1,1170 @@
+/* =========================================================
+   0) VARIABLES GLOBALES
+   ========================================================= */
+:root {
+  --kg-bg: #05010f;
+  --kg-bg-alt: #0a0719;
+
+  --kg-neon-blue: #2090e0;
+  --kg-neon-blue-soft: #1070e0;
+  --kg-neon-pink: #f03070;
+
+  --kg-text: #e5e5ff;
+  --kg-text-muted: #9a9ad0;
+
+  --kg-radius-lg: 18px;
+  --kg-radius-md: 12px;
+  --kg-radius-pill: 999px;
+
+  --kg-shadow-neon-blue: 0 0 16px rgba(32, 144, 224, 0.75);
+  --kg-shadow-neon-pink: 0 0 16px rgba(240, 48, 112, 0.75);
+
+  --kg-transition-fast: 0.18s ease-out;
+  --kg-max-width: 1080px;
+
+  --kg-font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* ✅ Control del inicio del vídeo bajo el header (si lo necesitas) */
+  --kg-header-height: 0px;
+}
+
+/* =========================================================
+   1) RESET + BASE
+   ========================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: var(--kg-font-main);
+  color: var(--kg-text);
+  min-height: 100vh;
+  overflow-x: hidden;
+
+  /* Fondo por si el vídeo tarda */
+  background: radial-gradient(circle at top, #161342 0, #05010f 55%, #000 100%);
+}
+
+/* =========================================================
+   2) ESTRUCTURA GENERAL + CAPAS (VIDEO FONDO)
+   ========================================================= */
+.kg-page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  /* deja espacio para el header fijo */
+  padding-top: 80px;
+}
+
+/* Contenedor del vídeo de fondo */
+.kg-bg-video-wrap {
+  position: fixed;
+  top: var(--kg-header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Vídeo */
+.kg-bg-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.5) contrast(1.05);
+}
+
+/* =========================================================
+   3) HEADER + LOGO
+   ========================================================= */
+.kg-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  z-index: 100;
+  backdrop-filter: blur(8px);
+
+  background: linear-gradient(
+    90deg,
+    rgba(5, 1, 15, 0.92),
+    rgba(10, 7, 25, 0.92)
+  );
+
+  padding: 0.75rem 1.5rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kg-logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.kg-logo-wrap:hover,
+.kg-logo-wrap:focus {
+  text-decoration: none;
+  color: inherit;
+}
+
+.kg-logo-wrap:focus-visible {
+  outline: 2px solid rgba(32, 144, 224, 0.8);
+  outline-offset: 3px;
+  box-shadow:
+    0 0 12px rgba(32, 144, 224, 0.6),
+    0 0 18px rgba(240, 48, 112, 0.45);
+}
+
+.kg-logo-orbit {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: radial-gradient(
+    circle at center,
+    #05010f 0%,
+    #05010f 55%,
+    rgba(10, 15, 40, 0.4) 80%,
+    transparent 100%
+  );
+
+  box-shadow:
+    0 0 40px rgba(0, 0, 0, 0.9),
+    0 0 28px rgba(32, 144, 224, 0.7);
+}
+
+.kg-logo {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+}
+
+.kg-brand-highlight {
+  color: #ffffff;
+  text-shadow: none;
+}
+
+/* =========================================================
+   4) NAV (HORIZONTAL + SUBMENÚ POR HOVER)
+   ========================================================= */
+.kg-nav {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.kg-nav-list {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.kg-nav-item {
+  position: relative;
+}
+
+.kg-nav-link {
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+/* Pastilla botones del menú */
+.kg-nav-link--pill {
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--kg-radius-pill);
+  border: 1px solid rgba(144, 190, 255, 0.5);
+
+  background: radial-gradient(
+      circle at top left,
+      rgba(32, 144, 224, 0.45),
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(240, 48, 112, 0.45),
+      transparent 60%
+    );
+
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.7);
+
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.kg-nav-link--pill:hover {
+  transform: translateY(-1px);
+  border-color: rgba(240, 48, 112, 0.7);
+  box-shadow:
+    0 0 20px rgba(32, 144, 224, 0.6),
+    0 0 28px rgba(240, 48, 112, 0.6);
+}
+
+.kg-nav-link--active {
+  box-shadow:
+    0 0 24px rgba(32, 144, 224, 0.8),
+    0 0 32px rgba(240, 48, 112, 0.8);
+}
+
+.kg-nav-link--disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Submenú */
+.kg-submenu {
+  position: absolute;
+  top: 110%;
+  left: 0;
+
+  min-width: 220px;
+  padding: 0.6rem 0.5rem;
+  border-radius: 0.75rem;
+  margin: 0;
+
+  list-style: none;
+
+  background: radial-gradient(
+    circle at top left,
+    rgba(32, 144, 224, 0.9),
+    rgba(10, 7, 25, 0.98)
+  );
+
+  box-shadow:
+    0 18px 35px rgba(0, 0, 0, 0.85),
+    0 0 25px rgba(240, 48, 112, 0.5);
+
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+
+  z-index: 50;
+}
+
+.kg-nav-item--has-sub:hover .kg-submenu {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.kg-submenu-link {
+  display: block;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.5rem;
+
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: #e5f0ff;
+  white-space: nowrap;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.kg-submenu-link:hover {
+  background: rgba(15, 23, 42, 0.95);
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+.kg-submenu-link--disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+/* =========================================================
+   4.0) HERO HOME
+   ========================================================= */
+.kg-home-hero {
+  padding: 2.4rem 1.5rem 1.4rem;
+  display: flex;
+  justify-content: center;
+}
+
+.kg-home-hero-inner {
+  width: 100%;
+  max-width: var(--kg-max-width);
+
+  background: linear-gradient(145deg, #05010f, #0a0719);
+  border-radius: var(--kg-radius-lg);
+  border: 1px solid rgba(32, 144, 224, 0.35);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8);
+  padding: 2rem 1.8rem;
+}
+
+.kg-home-hero-kicker {
+  margin: 0 0 0.45rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kg-text-muted);
+}
+
+.kg-home-hero h1 {
+  margin: 0 0 0.35rem;
+  font-size: 2.1rem;
+}
+
+.kg-home-hero p {
+  margin: 0 0 0.25rem;
+  max-width: 760px;
+  color: var(--kg-text-muted);
+}
+
+.kg-home-hero-actions {
+  margin-top: 1.1rem;
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* =========================================================
+   4.1) HERO + SECCIONES REDES
+   ========================================================= */
+.kg-hero-redes {
+  padding: 2.4rem 1.5rem 1.4rem;
+  display: flex;
+  justify-content: center;
+}
+
+.kg-hero-redes-inner {
+  width: 100%;
+  max-width: var(--kg-max-width);
+
+  background: linear-gradient(145deg, #05010f, #0a0719);
+  border-radius: var(--kg-radius-lg);
+  border: 1px solid rgba(32, 144, 224, 0.35);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8);
+  padding: 1.8rem 1.6rem;
+}
+
+.kg-hero-redes h1 {
+  margin: 0 0 0.35rem;
+  font-size: 2rem;
+}
+
+.kg-hero-redes p {
+  margin: 0;
+  max-width: 780px;
+  color: var(--kg-text-muted);
+}
+
+.kg-section {
+  padding: 1.5rem 1.5rem 0.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.kg-section-inner {
+  width: 100%;
+  max-width: var(--kg-max-width);
+
+  background: linear-gradient(145deg, #05010f, #0a0719);
+  border-radius: var(--kg-radius-lg);
+  border: 1px solid rgba(32, 144, 224, 0.35);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8);
+  padding: 1.4rem 1.5rem 1.6rem;
+}
+
+.kg-section-head {
+  margin: 0 0 1rem;
+}
+
+.kg-section-kicker {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--kg-text-muted);
+}
+
+.kg-section-head h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.3rem;
+}
+
+.kg-section-head p {
+  margin: 0;
+  color: var(--kg-text-muted);
+}
+
+.kg-link-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.kg-faq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.kg-faq-item {
+  background: linear-gradient(145deg, #05010f, #0a0719);
+  border-radius: var(--kg-radius-md);
+  border: 1px solid rgba(32, 144, 224, 0.35);
+  box-shadow: 0 18px 28px rgba(0, 0, 0, 0.7);
+  padding: 1rem 1.1rem;
+}
+
+.kg-faq-item h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+}
+
+.kg-faq-item p {
+  margin: 0;
+  color: var(--kg-text-muted);
+}
+
+/* =========================================================
+   4.2) BANNER GEO
+   ========================================================= */
+.kg-geo-banner {
+  display: none;
+  margin: 0 auto;
+  width: 100%;
+  max-width: var(--kg-max-width);
+  padding: 1rem 1.25rem;
+
+  background: linear-gradient(145deg, #05010f, #0a0719);
+  border-radius: var(--kg-radius-lg);
+  border: 1px solid rgba(32, 144, 224, 0.35);
+  box-shadow: 0 20px 36px rgba(0, 0, 0, 0.75);
+}
+
+.kg-geo-banner.is-visible {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.kg-geo-banner p {
+  margin: 0;
+  color: var(--kg-text-muted);
+}
+
+.kg-geo-banner-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.kg-geo-banner .kg-btn,
+.kg-geo-banner .kg-btn-ghost {
+  min-width: 120px;
+}
+
+/* =========================================================
+   5) STREAM (TIPO TWITCH)
+   ========================================================= */
+.kg-stream {
+  padding: 2.5rem 1.5rem 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.kg-stream-inner {
+  width: 100%;
+  max-width: 1280px;
+
+  background: linear-gradient(145deg, #05010f, #0a0719);
+  border-radius: var(--kg-radius-lg);
+  border: 1px solid rgba(32, 144, 224, 0.35);
+
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8);
+  padding: 1.6rem 1.6rem 1.8rem;
+}
+
+.kg-stream-header h2 {
+  margin: 0 0 0.3rem;
+  font-size: 1.3rem;
+}
+
+.kg-stream-header p {
+  margin: 0 0 1.2rem;
+  color: var(--kg-text-muted);
+  font-size: 0.9rem;
+}
+
+.kg-stream-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+  gap: 1.2rem;
+  align-items: stretch;
+}
+
+.kg-stream-player,
+.kg-stream-chat {
+  overflow: hidden;
+  border-radius: var(--kg-radius-md);
+
+  box-shadow: var(--kg-shadow-neon-blue);
+  background: #000;
+
+  height: 540px;
+}
+
+.kg-stream-player iframe,
+.kg-stream-chat iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* =========================================================
+   6) REDES + PROMOS (CARDS)
+   ✅ OPTIMIZACIÓN: hover "transparente -> sólido" progresivo
+   ========================================================= */
+.kg-socials-section {
+  padding: 1.5rem 1.5rem 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.kg-socials-inner {
+  width: 100%;
+  max-width: var(--kg-max-width);
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+/* Base común de card
+   - Mantiene tu estética actual
+   - Añade capa "solid hover" sin cambiar visual final */
+.kg-social-card {
+  /* ✅ Variables para controlar la transición sin reescribir mil reglas */
+  --kg-card-solid-opacity: 0; /* 0 normal, 1 en hover */
+  --kg-card-solid-bg: radial-gradient(
+      circle at top left,
+      rgba(240, 48, 112, 0.45),
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(32, 144, 224, 0.5),
+      transparent 60%
+    );
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 1rem 1.2rem;
+  height: 110px;
+
+  border-radius: var(--kg-radius-md);
+  border: 1px solid rgba(32, 144, 224, 0.55);
+
+  /* ✅ Fondo base (glass/translúcido como ya lo tienes) */
+  background: var(--kg-card-solid-bg);
+
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.8);
+  text-decoration: none;
+  color: var(--kg-text);
+  overflow: hidden;
+
+  transition:
+    transform var(--kg-transition-fast),
+    box-shadow var(--kg-transition-fast),
+    border-color var(--kg-transition-fast);
+}
+
+/* ✅ Capa “solid” que aparece progresivamente al hover
+   - Mantiene el mismo fondo, pero más “sólido” (opaco)
+   - La transición es suave y no hace saltos visuales */
+.kg-social-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  /* Repetimos el fondo, pero con más opacidad => sensación “sólida” */
+  background: var(--kg-card-solid-bg);
+  filter: saturate(1.05) contrast(1.05);
+
+  opacity: var(--kg-card-solid-opacity);
+  transition: opacity var(--kg-transition-fast);
+
+  z-index: 0;
+}
+
+/* Tu brillo central, intacto */
+.kg-social-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  opacity: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.08),
+    transparent 60%
+  );
+
+  transition: opacity var(--kg-transition-fast);
+  z-index: 1;
+}
+
+/* ✅ Hover: eleva, ilumina, y hace el fondo más sólido progresivamente */
+.kg-social-card:hover {
+  --kg-card-solid-opacity: 1; /* 👈 aquí ocurre el “transparente -> sólido” */
+  transform: translateY(-2px);
+  box-shadow: var(--kg-shadow-neon-blue), var(--kg-shadow-neon-pink);
+  border-color: rgba(240, 48, 112, 0.65);
+}
+
+.kg-social-card:hover::after {
+  opacity: 1;
+}
+
+/* Aseguramos que el texto quede encima de las capas */
+.kg-social-label,
+.kg-social-handle {
+  position: relative;
+  z-index: 2;
+}
+
+.kg-social-label {
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  opacity: 1;
+  font-weight: 700;
+  color: #ffffff;
+
+  text-shadow:
+    0 0 6px rgba(255, 255, 255, 0.35),
+    0 0 10px rgba(32, 144, 224, 0.25);
+}
+
+.kg-social-handle {
+  margin-top: 0.35rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+
+  color: #ffffff;
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.45),
+    0 0 14px rgba(32, 144, 224, 0.35);
+}
+
+/* =========================================================
+   7) VARIANTES DE FONDO POR RED (REUTILIZANDO LA VARIABLE)
+   ========================================================= */
+.kg-social-card--twitch {
+  --kg-card-solid-bg: radial-gradient(circle at top left, rgba(91, 58, 255, 0.35), transparent 60%),
+                      radial-gradient(circle at bottom right, rgba(32, 144, 224, 0.35), transparent 60%);
+}
+
+.kg-social-card--yt {
+  --kg-card-solid-bg: radial-gradient(circle at top left, rgba(240, 48, 112, 0.3), transparent 60%),
+                      radial-gradient(circle at bottom right, rgba(255, 0, 0, 0.18), transparent 60%);
+}
+
+.kg-social-card--ig {
+  --kg-card-solid-bg: radial-gradient(circle at top left, rgba(254, 218, 119, 0.25), transparent 60%),
+                      radial-gradient(circle at bottom right, rgba(193, 53, 132, 0.3), transparent 60%);
+}
+
+.kg-social-card--x {
+  --kg-card-solid-bg: radial-gradient(circle at top left, rgba(32, 144, 224, 0.4), transparent 60%),
+                      radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.7), transparent 60%);
+}
+
+.kg-social-card--tt {
+  --kg-card-solid-bg: radial-gradient(circle at top left, rgba(240, 48, 112, 0.3), transparent 60%),
+                      radial-gradient(circle at bottom right, rgba(32, 144, 224, 0.35), transparent 60%);
+}
+
+.kg-social-card--pampling {
+  --kg-card-solid-bg: radial-gradient(circle at top left, rgba(56, 191, 240, 0.35), transparent 60%),
+                      radial-gradient(circle at bottom right, rgba(255, 114, 179, 0.38), transparent 60%);
+}
+
+.kg-social-card--zdrinks {
+  --kg-card-solid-bg: radial-gradient(circle at top left, rgba(255, 228, 92, 0.35), transparent 60%),
+                      radial-gradient(circle at bottom right, rgba(70, 214, 255, 0.4), transparent 60%);
+}
+
+.kg-social-card--giveaway {
+  --kg-card-solid-bg: radial-gradient(circle at top left, rgba(139, 92, 246, 0.4), transparent 60%),
+                      radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.45), transparent 60%);
+}
+
+.kg-social-card--mercadona {
+  --kg-card-solid-bg: radial-gradient(circle at top left, rgba(0, 166, 81, 0.35), transparent 60%),
+                      radial-gradient(circle at bottom right, rgba(102, 187, 106, 0.4), transparent 60%);
+}
+
+/* =========================================================
+   8) FOOTER
+   ========================================================= */
+.kg-footer {
+  margin-top: auto;
+  padding: 1.4rem 1.5rem 1.8rem;
+
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--kg-text-muted);
+}
+
+/* =========================================================
+   9) RESPONSIVE
+   ========================================================= */
+@media (max-width: 900px) {
+  .kg-stream-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kg-stream-player,
+  .kg-stream-chat {
+    height: 320px;
+  }
+
+  .kg-socials-inner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .kg-social-card {
+    height: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .kg-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .kg-nav-list {
+    gap: 0.45rem;
+  }
+
+  .kg-nav-link--pill {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.8rem;
+  }
+}
+/* =========================================================
+   CATÁLOGO — GRID 2 POR FILA
+   ========================================================= */
+.kg-products-grid--catalog {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.6rem;
+}
+
+/* =========================================================
+   TARJETA DE PRODUCTO — SÓLIDA (SIN TRANSPARENCIA)
+   ========================================================= */
+.kg-product-solid {
+  position: relative;
+
+  background: linear-gradient(
+    145deg,
+    #05010f,
+    #0a0719
+  ); /* 🔒 fondo sólido */
+
+  border-radius: var(--kg-radius-lg);
+  border: 1px solid rgba(32, 144, 224, 0.45);
+
+  box-shadow:
+    0 18px 36px rgba(0, 0, 0, 0.85),
+    0 0 22px rgba(32, 144, 224, 0.35);
+
+  padding: 1.6rem;
+  min-height: 340px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.kg-product-solid:hover {
+  transform: translateY(-3px);
+  border-color: rgba(240, 48, 112, 0.7);
+  box-shadow:
+    0 22px 44px rgba(0, 0, 0, 0.9),
+    0 0 26px rgba(240, 48, 112, 0.55);
+}
+
+/* =========================================================
+   BADGE
+   ========================================================= */
+.kg-product-solid-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--kg-radius-pill);
+
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  background: var(--kg-neon-pink);
+  color: #fff;
+
+  box-shadow: var(--kg-shadow-neon-pink);
+}
+
+/* =========================================================
+   IMAGEN (PLACEHOLDER)
+   ========================================================= */
+.kg-product-solid-image {
+  height: 180px;
+  border-radius: var(--kg-radius-md);
+
+  background: linear-gradient(
+    135deg,
+    #07031a,
+    #05010f
+  );
+
+  border: 1px solid rgba(32, 144, 224, 0.5);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--kg-text-muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   INFO
+   ========================================================= */
+.kg-product-solid-info h3 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.kg-product-solid-desc {
+  font-size: 0.9rem;
+  color: var(--kg-text-muted);
+  margin: 0;
+}
+
+.kg-product-solid-meta {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.kg-product-solid-price {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--kg-neon-blue);
+  text-shadow: var(--kg-shadow-neon-blue);
+}
+
+.kg-product-solid-tagline {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--kg-text-muted);
+}
+
+/* =========================================================
+   ACCIONES
+   ========================================================= */
+.kg-product-solid-actions {
+  margin-top: 0.8rem;
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+/* =========================================================
+   PLACEHOLDERS (PRODUCTOS VACÍOS)
+   ========================================================= */
+.kg-product-solid--empty {
+  background: linear-gradient(
+    145deg,
+    #05010f,
+    #07031a
+  );
+
+  border-style: dashed;
+  border-color: rgba(151, 151, 214, 0.35);
+
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.8);
+}
+
+.kg-product-solid--empty::after {
+  content: "Próximamente";
+  margin: auto;
+
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+
+  color: rgba(151, 151, 214, 0.6);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 900px) {
+  .kg-products-grid--catalog {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+/* =========================================================
+   GRID CATÁLOGO: 2 POR FILA
+   ========================================================= */
+.kg-products-grid--catalog {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.6rem;
+}
+
+/* =========================================================
+   CARD ALTA (≈2x en vertical) + LAYOUT IZQ IMAGEN / DER TEXTO
+   ========================================================= */
+.kg-product-tall {
+  position: relative;
+
+  /* SIN TRANSPARENCIA */
+  background: linear-gradient(145deg, #05010f, #0a0719);
+  border-radius: var(--kg-radius-lg);
+  border: 1px solid rgba(32, 144, 224, 0.45);
+
+  box-shadow:
+    0 18px 36px rgba(0, 0, 0, 0.88),
+    0 0 22px rgba(32, 144, 224, 0.28);
+
+  /* 🔥 clave: doble de alto */
+  min-height: 560px;
+
+  /* layout interno */
+  display: flex;
+  gap: 1.2rem;
+  padding: 1.4rem;
+
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.kg-product-tall:hover {
+  transform: translateY(-3px);
+  border-color: rgba(240, 48, 112, 0.7);
+  box-shadow:
+    0 24px 46px rgba(0, 0, 0, 0.92),
+    0 0 26px rgba(240, 48, 112, 0.45);
+}
+
+/* =========================================================
+   BADGE
+   ========================================================= */
+.kg-product-tall-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--kg-radius-pill);
+
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  background: var(--kg-neon-pink);
+  color: #fff;
+  box-shadow: var(--kg-shadow-neon-pink);
+}
+
+/* =========================================================
+   SUBCONTENEDOR IZQUIERDO (IMAGEN MODELO FUTURA) — VERTICAL
+   ========================================================= */
+.kg-product-tall-media {
+  width: 42%;
+  min-width: 260px;
+
+  border-radius: var(--kg-radius-md);
+  border: 1px solid rgba(32, 144, 224, 0.55);
+
+  /* SIN TRANSPARENCIA */
+  background: linear-gradient(135deg, #07031a, #05010f);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* ocupa alto completo del card */
+  align-self: stretch;
+}
+
+.kg-product-tall-media-ph {
+  color: rgba(229, 229, 255, 0.45);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   CONTENIDO DERECHO (FUERA DEL SUBCONTENEDOR)
+   ========================================================= */
+.kg-product-tall-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding-top: 0.15rem;
+}
+
+.kg-product-tall-title {
+  margin: 0;
+  color: #ffffff;
+  font-weight: 800; /* blanco + negrita */
+  font-size: 1.35rem;
+}
+
+.kg-product-tall-desc {
+  margin: 0;
+  color: #ffffff;  /* blanco normal */
+  font-weight: 400;
+  line-height: 1.45;
+  opacity: 0.92;
+}
+
+/* meta abajo */
+.kg-product-tall-meta {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.kg-product-tall-price {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--kg-neon-blue);
+  text-shadow: var(--kg-shadow-neon-blue);
+}
+
+.kg-product-tall-tagline {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(229, 229, 255, 0.65);
+}
+
+/* botones */
+.kg-product-tall-actions {
+  margin-top: 0.7rem;
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+/* =========================================================
+   PLACEHOLDER (VACÍO)
+   ========================================================= */
+.kg-product-tall--empty {
+  border-style: dashed;
+  border-color: rgba(151, 151, 214, 0.35);
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.75);
+}
+
+.kg-product-tall--empty .kg-product-tall-title,
+.kg-product-tall--empty .kg-product-tall-desc {
+  opacity: 0.65;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 1100px) {
+  .kg-product-tall-media {
+    min-width: 220px;
+  }
+}
+
+@media (max-width: 900px) {
+  .kg-products-grid--catalog {
+    grid-template-columns: 1fr;
+  }
+
+  .kg-product-tall {
+    flex-direction: column;
+    min-height: 680px;
+  }
+
+  .kg-product-tall-media {
+    width: 100%;
+    min-width: 0;
+    height: 320px;
+  }
+}
