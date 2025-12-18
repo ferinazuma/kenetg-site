@@ -1,20 +1,52 @@
-interface GeoPayload {
-  lat?: number;
-  lon?: number;
-  accuracy?: number;
-  timestamp?: number;
-  insecureContext?: boolean;
-  unsupported?: boolean;
-  denied?: boolean;
-  declined?: boolean;
-  code?: number;
-  message?: string;
-}
+type GeoStatus =
+  | "empty"
+  | "insecure"
+  | "unsupported"
+  | "denied"
+  | "declined"
+  | "ok"
+  | "stored";
 
-interface GeoStatusResult {
-  status: "empty" | "insecure" | "unsupported" | "denied" | "declined" | "ok" | "stored";
-  payload: GeoPayload | null;
-}
+type GeoStoredPayload =
+  | {
+      lat: number;
+      lon: number;
+      accuracy?: number;
+      timestamp: number;
+      insecureContext?: false;
+      unsupported?: false;
+      denied?: false;
+      declined?: false;
+    }
+  | {
+      insecureContext: true;
+      timestamp: number;
+      unsupported?: true;
+      denied?: boolean;
+      declined?: boolean;
+    }
+  | {
+      unsupported: true;
+      timestamp: number;
+      insecureContext?: boolean;
+      denied?: boolean;
+      declined?: boolean;
+    }
+  | {
+      denied?: boolean;
+      declined?: boolean;
+      timestamp: number;
+      insecureContext?: boolean;
+      unsupported?: boolean;
+    };
+
+type GeoRequestResult =
+  | { status: "disabled" }
+  | { status: "insecure"; payload: GeoStoredPayload }
+  | { status: "unsupported"; payload: GeoStoredPayload }
+  | { status: "denied" | "error" | "stored"; payload: GeoStoredPayload };
+
+type GeoStoredStatus = { status: GeoStatus; payload: GeoStoredPayload | null };
 
 interface GeoConfig {
   storageKey: string;
@@ -22,177 +54,175 @@ interface GeoConfig {
   enabled: boolean;
   requestTimeout: number;
   maximumAge: number;
+  fetchTimeout: number;
 }
 
-type GeoRequestResult =
-  | { status: "disabled" }
-  | { status: "insecure"; payload: GeoPayload }
-  | { status: "unsupported"; payload: GeoPayload }
-  | { status: "stored"; payload: GeoPayload }
-  | { status: "denied"; payload: GeoPayload }
-  | { status: "error"; payload: GeoPayload };
+const EVENT_NAME = "kggeo:update";
 
-interface KGGeoType {
-  config: GeoConfig;
-  init(options?: Partial<GeoConfig>): void;
-  _getStorageKey(): string;
-  getStored(): GeoPayload | null;
-  clearStored(): void;
-  _save(payload: GeoPayload): GeoPayload;
-  _sendToEndpoint(payload: GeoPayload): void;
-  getStatus(): GeoStatusResult;
-  request(): Promise<GeoRequestResult>;
-  EVENT?: string;
+const defaults: GeoConfig = {
+  storageKey: "kg_geo",
+  endpoint: null,
+  enabled: false,
+  requestTimeout: 8000,
+  maximumAge: 600_000,
+  fetchTimeout: 3000
+};
+
+function notifyUpdate(payload: GeoStoredPayload | null) {
+  try {
+    window.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: payload }));
+  } catch {
+    /* noop */
+  }
 }
 
-(function (global: Window & { KGGeo?: KGGeoType }) {
-  const EVENT_NAME = "kggeo:update";
+function sanitizeConfig(options: Partial<GeoConfig> = {}): GeoConfig {
+  const cfg: GeoConfig = { ...defaults, ...options };
+  cfg.enabled = Boolean(cfg.enabled);
+  cfg.endpoint =
+    typeof cfg.endpoint === "string" && cfg.endpoint.trim() ? cfg.endpoint.trim() : null;
+  cfg.requestTimeout = Number.isFinite(cfg.requestTimeout)
+    ? cfg.requestTimeout
+    : defaults.requestTimeout;
+  cfg.maximumAge = Number.isFinite(cfg.maximumAge) ? cfg.maximumAge : defaults.maximumAge;
+  cfg.fetchTimeout = Number.isFinite(cfg.fetchTimeout) ? cfg.fetchTimeout : defaults.fetchTimeout;
+  return cfg;
+}
 
-  const defaults: GeoConfig = {
-    storageKey: "kg_geo",
-    endpoint: null,
-    enabled: false,
-    requestTimeout: 8000,
-    maximumAge: 600000
-  };
+function hasCoords(payload: GeoStoredPayload): payload is GeoStoredPayload & { lat: number; lon: number } {
+  return (payload as any).lat != null && (payload as any).lon != null;
+}
 
-  function notifyUpdate(payload: GeoPayload | null) {
+class GeoService {
+  public EVENT?: string;
+  public config: GeoConfig = { ...defaults };
+
+  init(options: Partial<GeoConfig> = {}) {
+    this.config = sanitizeConfig(options);
+  }
+
+  private storageKey(): string {
+    return this.config.storageKey || defaults.storageKey;
+  }
+
+  getStored(): GeoStoredPayload | null {
     try {
-      global.dispatchEvent(new CustomEvent(EVENT_NAME, { detail: payload || null }));
-    } catch (err) {
-      /* noop */
+      const raw = window.localStorage.getItem(this.storageKey());
+      return raw ? (JSON.parse(raw) as GeoStoredPayload) : null;
+    } catch {
+      return null;
     }
   }
 
-  function sanitizeConfig(options: Partial<GeoConfig> = {}): GeoConfig {
-    const cfg: GeoConfig = { ...defaults, ...options };
-    cfg.enabled = Boolean(cfg.enabled);
-    cfg.endpoint =
-      typeof cfg.endpoint === "string" && cfg.endpoint.trim() ? cfg.endpoint.trim() : null;
-    cfg.requestTimeout = Number.isFinite(cfg.requestTimeout)
-      ? cfg.requestTimeout
-      : defaults.requestTimeout;
-    cfg.maximumAge = Number.isFinite(cfg.maximumAge) ? cfg.maximumAge : defaults.maximumAge;
-    return cfg;
+  clearStored(): void {
+    try {
+      window.localStorage.removeItem(this.storageKey());
+    } catch {
+      /* noop */
+    }
+    notifyUpdate(null);
   }
 
-  const KGGeo: KGGeoType = {
-    config: { ...defaults },
+  _save(payload: GeoStoredPayload): GeoStoredPayload {
+    try {
+      window.localStorage.setItem(this.storageKey(), JSON.stringify(payload));
+    } catch {
+      /* noop */
+    }
+    notifyUpdate(payload);
+    return payload;
+  }
 
-    init(options: Partial<GeoConfig> = {}) {
-      this.config = sanitizeConfig(options);
-    },
-
-    _getStorageKey(): string {
-      return this.config.storageKey || defaults.storageKey;
-    },
-
-    getStored(): GeoPayload | null {
-      try {
-        const raw = global.localStorage.getItem(this._getStorageKey());
-        return raw ? (JSON.parse(raw) as GeoPayload) : null;
-      } catch (err) {
-        return null;
-      }
-    },
-
-    clearStored(): void {
-      try {
-        global.localStorage.removeItem(this._getStorageKey());
-      } catch (err) {
-        /* noop */
-      }
-      notifyUpdate(null);
-    },
-
-    _save(payload: GeoPayload): GeoPayload {
-      try {
-        global.localStorage.setItem(this._getStorageKey(), JSON.stringify(payload));
-      } catch (err) {
-        /* noop */
-      }
-      notifyUpdate(payload);
-      return payload;
-    },
-
-    _sendToEndpoint(payload: GeoPayload) {
-      if (!this.config.endpoint) return;
-      fetch(this.config.endpoint, {
+  private async sendToEndpoint(payload: GeoStoredPayload): Promise<void> {
+    if (!this.config.endpoint) return;
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), this.config.fetchTimeout);
+    try {
+      await fetch(this.config.endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
-        keepalive: true
-      }).catch(() => {
-        /* silent fail */
+        keepalive: true,
+        signal: controller.signal
       });
-    },
+    } catch {
+      /* silent fail */
+    } finally {
+      window.clearTimeout(timer);
+    }
+  }
 
-    getStatus(): GeoStatusResult {
-      const payload = this.getStored();
-      if (!payload) return { status: "empty", payload: null };
-      if (payload.insecureContext) return { status: "insecure", payload };
-      if (payload.unsupported) return { status: "unsupported", payload };
-      if (payload.denied) return { status: "denied", payload };
-      if (payload.declined) return { status: "declined", payload };
-      if (payload.lat != null && payload.lon != null) return { status: "ok", payload };
-      return { status: "stored", payload };
-    },
+  getStatus(): GeoStoredStatus {
+    const payload = this.getStored();
+    if (!payload) return { status: "empty", payload: null };
+    if (payload.insecureContext) return { status: "insecure", payload };
+    if (payload.unsupported) return { status: "unsupported", payload };
+    if (payload.denied) return { status: "denied", payload };
+    if (payload.declined) return { status: "declined", payload };
+    if (hasCoords(payload)) return { status: "ok", payload };
+    return { status: "stored", payload };
+  }
 
-    request(): Promise<GeoRequestResult> {
-      if (!this.config.enabled) {
-        return Promise.resolve({ status: "disabled" });
-      }
+  request(): Promise<GeoRequestResult> {
+    if (!this.config.enabled) {
+      return Promise.resolve({ status: "disabled" });
+    }
+    if (window.isSecureContext === false) {
+      const payload = this._save({
+        unsupported: true,
+        insecureContext: true,
+        timestamp: Date.now()
+      });
+      return Promise.resolve({ status: "insecure", payload });
+    }
+    if (!("geolocation" in window.navigator)) {
+      const payload = this._save({ unsupported: true, timestamp: Date.now() });
+      return Promise.resolve({ status: "unsupported", payload });
+    }
 
-      if (global.isSecureContext === false) {
-        const payload = this._save({
-          unsupported: true,
-          insecureContext: true,
+    const options: PositionOptions = {
+      enableHighAccuracy: false,
+      timeout: this.config.requestTimeout || defaults.requestTimeout,
+      maximumAge: this.config.maximumAge
+    };
+
+    return new Promise((resolve) => {
+      const onSuccess = (pos: GeolocationPosition) => {
+        const payload: GeoStoredPayload = {
+          lat: pos.coords.latitude,
+          lon: pos.coords.longitude,
+          accuracy: pos.coords.accuracy,
           timestamp: Date.now()
-        });
-        return Promise.resolve({ status: "insecure", payload });
-      }
-
-      if (!("geolocation" in global.navigator)) {
-        const payload = this._save({ unsupported: true, timestamp: Date.now() });
-        return Promise.resolve({ status: "unsupported", payload });
-      }
-
-      const options: PositionOptions = {
-        enableHighAccuracy: false,
-        timeout: this.config.requestTimeout || defaults.requestTimeout,
-        maximumAge: this.config.maximumAge
+        };
+        this._save(payload);
+        void this.sendToEndpoint(payload);
+        resolve({ status: "stored", payload });
       };
 
-      return new Promise<GeoRequestResult>((resolve) => {
-        global.navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            const payload: GeoPayload = {
-              lat: pos.coords.latitude,
-              lon: pos.coords.longitude,
-              accuracy: pos.coords.accuracy,
-              timestamp: Date.now()
-            };
+      const onError = (err: GeolocationPositionError) => {
+        const payload = this._save({
+          denied: err.code === 1,
+          timestamp: Date.now(),
+          code: err.code,
+          message: err.message
+        } as GeoStoredPayload);
+        const status: GeoRequestResult["status"] = err.code === 1 ? "denied" : "error";
+        resolve({ status, payload });
+      };
 
-            this._save(payload);
-            this._sendToEndpoint(payload);
-            resolve({ status: "stored", payload });
-          },
-          (err) => {
-            const payload = this._save({
-              denied: err.code === 1,
-              code: err.code,
-              message: err.message,
-              timestamp: Date.now()
-            });
-            const status = err.code === 1 ? "denied" : "error";
-            resolve({ status, payload });
-          },
-          options
-        );
-      });
-    }
-  };
+      window.navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
+    });
+  }
+}
 
-  global.KGGeo = KGGeo;
-  KGGeo.EVENT = EVENT_NAME;
-})(window as Window & { KGGeo?: KGGeoType });
+declare global {
+  interface Window {
+    KGGeo?: GeoService & { EVENT?: string };
+  }
+}
+
+const KGGeo = new GeoService();
+KGGeo.EVENT = EVENT_NAME;
+window.KGGeo = KGGeo;
+
+export {};
