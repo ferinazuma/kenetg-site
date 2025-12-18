@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "None",
+    "lib": ["DOM", "ES2019"],
+    "rootDir": "./web/assets/ts",
+    "outDir": "./web/assets/js",
+    "strict": true,
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "moduleResolution": "Node",
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "include": ["web/assets/ts/**/*"]
+}

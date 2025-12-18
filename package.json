@@ -1,0 +1,13 @@
+{
+  "name": "kenetg-site",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build:ts": "tsc -p tsconfig.json",
+    "build:min": "node dev/scripts/minify.js",
+    "build": "npm run build:ts && npm run build:min"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}
