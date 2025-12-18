@@ -49,11 +49,7 @@ function writeMinified(src, dest, transform) {
 function copyAssets() {
   const sourceAssets = path.join("web", "assets");
   const targetAssets = path.join(distBase, "assets");
-  fs.cpSync(sourceAssets, targetAssets, {
-    recursive: true,
-    // Skip heavy originals not used in prod (e.g., fondo-web.webm original)
-    filter: (src) => !src.endsWith(`fondo-web.webm`) && !src.endsWith(`fondo-web.optimized.webm`)
-  });
+  fs.cpSync(sourceAssets, targetAssets, { recursive: true });
   console.log(`copied assets -> ${targetAssets}`);
 }
 
