@@ -48,6 +48,9 @@ build/
 !web/dist/**
 # Keep dist HTML tracked but avoid duplicating assets tree
 web/dist/assets/
+dev/bin/ffmpeg/
+dev/bin/ffmpeg.zip
+web/assets/media/fondo-web.optimized.webm
 
 # =========================
 # Python (just in case)
