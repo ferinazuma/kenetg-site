@@ -51,6 +51,8 @@ web/dist/assets/
 dev/bin/ffmpeg/
 dev/bin/ffmpeg.zip
 web/assets/media/fondo-web.optimized.webm
+web/assets/media/fondo-web.webm
+web/assets/media/fondo-web-small.backup.webm
 
 # =========================
 # Python (just in case)
