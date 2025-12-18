@@ -33,7 +33,7 @@
   <meta name="twitter:image:alt" content="Logo de KenetG con fondo neon" />
   <link rel="alternate" hreflang="es" href="https://kenetg.com/tienda/" />
   <link rel="alternate" hreflang="x-default" href="https://kenetg.com/tienda/" />
-  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="stylesheet" href="/assets/css/styles.min.css" />
 </head>
 
 <body>
@@ -130,7 +130,7 @@
             PÇ­gina preliminar (demo). AquÇð se mostrarÇ­n los drops y productos de la comunidad.
             Por ahora, solo hay un artÇðculo de prueba.
           </p>
-          <button class="kg-btn" onclick="scrollToStore()">
+          <button class="kg-btn" type="button" data-action="scroll-to-store">
             Ver camiseta extensible V1
           </button>
         </div>
@@ -172,8 +172,8 @@
                 </div>
 
                 <div class="kg-product-tall-actions">
-                  <button class="kg-btn kg-btn--secondary" onclick="showDemoAlert()">AÇñadir al carrito (demo)</button>
-                  <button class="kg-btn-ghost" onclick="showDemoAlert()">Ver detalles</button>
+                  <button class="kg-btn kg-btn--secondary" type="button" data-action="demo-alert">AÇñadir al carrito (demo)</button>
+                  <button class="kg-btn-ghost" type="button" data-action="demo-alert">Ver detalles</button>
                 </div>
               </div>
             </article>
@@ -265,8 +265,8 @@
   <!-- =======================================================
        6) JS
        ======================================================= -->
-  <script src="/assets/js/geo.js"></script>
-  <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/geo.min.js"></script>
+  <script src="/assets/js/main.min.js"></script>
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",

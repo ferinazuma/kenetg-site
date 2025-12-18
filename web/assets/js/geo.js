@@ -4,7 +4,8 @@
     storageKey: "kg_geo",
     endpoint: null,
     enabled: false,
-    requestTimeout: 8000
+    requestTimeout: 8000,
+    maximumAge: 600000
   };
 
   function notifyUpdate(payload) {
@@ -15,11 +16,23 @@
     }
   }
 
+  function sanitizeConfig(options) {
+    const cfg = { ...defaults, ...options };
+    cfg.enabled = Boolean(cfg.enabled);
+    cfg.endpoint =
+      typeof cfg.endpoint === "string" && cfg.endpoint.trim() ? cfg.endpoint.trim() : null;
+    cfg.requestTimeout = Number.isFinite(cfg.requestTimeout)
+      ? cfg.requestTimeout
+      : defaults.requestTimeout;
+    cfg.maximumAge = Number.isFinite(cfg.maximumAge) ? cfg.maximumAge : defaults.maximumAge;
+    return cfg;
+  }
+
   const KGGeo = {
     config: { ...defaults },
 
     init(options = {}) {
-      this.config = { ...defaults, ...options };
+      this.config = sanitizeConfig(options);
     },
 
     _getStorageKey() {
@@ -52,6 +65,18 @@
       }
       notifyUpdate(payload);
       return payload;
+    },
+
+    _sendToEndpoint(payload) {
+      if (!this.config.endpoint) return;
+      fetch(this.config.endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        keepalive: true
+      }).catch(() => {
+        /* silent fail */
+      });
     },
 
     getStatus() {
@@ -87,7 +112,7 @@
       const options = {
         enableHighAccuracy: false,
         timeout: this.config.requestTimeout || defaults.requestTimeout,
-        maximumAge: 600000
+        maximumAge: this.config.maximumAge
       };
 
       return new Promise((resolve) => {
@@ -101,17 +126,7 @@
             };
 
             this._save(payload);
-
-            if (this.config.endpoint) {
-              fetch(this.config.endpoint, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-              }).catch(() => {
-                /* silent fail */
-              });
-            }
-
+            this._sendToEndpoint(payload);
             resolve({ status: "stored", payload });
           },
           (err) => {
@@ -121,7 +136,8 @@
               message: err.message,
               timestamp: Date.now()
             });
-            resolve({ status: err.code === 1 ? "denied" : "error", payload });
+            const status = err.code === 1 ? "denied" : "error";
+            resolve({ status, payload });
           },
           options
         );

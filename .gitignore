@@ -43,6 +43,10 @@ dist/
 build/
 .cache/
 
+# Allow committing the static dist for production
+!web/dist/
+!web/dist/**
+
 # =========================
 # Python (just in case)
 # =========================
