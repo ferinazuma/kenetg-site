@@ -46,6 +46,8 @@ build/
 # Allow committing the static dist for production
 !web/dist/
 !web/dist/**
+# Keep dist HTML tracked but avoid duplicating assets tree
+web/dist/assets/
 
 # =========================
 # Python (just in case)

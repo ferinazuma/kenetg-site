@@ -24,12 +24,18 @@ const distBase = path.join("web", "dist");
 run();
 
 function run() {
+  cleanDist();
   jsTargets.forEach(({ src, dest }) => writeMinified(src, dest, minifyJs));
   cssTargets.forEach(({ src, dest }) => writeMinified(src, dest, minifyCss));
   htmlTargets.forEach((src) => {
     const dest = path.join(distBase, path.relative("web", src));
     writeMinified(src, dest, minifyHtml);
   });
+  copyAssets();
+}
+
+function cleanDist() {
+  fs.rmSync(distBase, { recursive: true, force: true });
 }
 
 function writeMinified(src, dest, transform) {
@@ -38,6 +44,13 @@ function writeMinified(src, dest, transform) {
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   fs.writeFileSync(dest, minified, "utf8");
   console.log(`minified: ${src} -> ${dest}`);
+}
+
+function copyAssets() {
+  const sourceAssets = path.join("web", "assets");
+  const targetAssets = path.join(distBase, "assets");
+  fs.cpSync(sourceAssets, targetAssets, { recursive: true });
+  console.log(`copied assets -> ${targetAssets}`);
 }
 
 function stripJsComments(code) {

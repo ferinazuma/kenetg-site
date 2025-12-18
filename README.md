@@ -37,7 +37,7 @@ Usa los canales publicos de KenetG en redes sociales para dudas o sugerencias.
 - Gestion de media: los archivos `.webm` grandes se controlan con Git LFS para no inflar el repositorio.
 - Buenas practicas: no se incluyen credenciales ni archivos `.env` en el repo; revisar configuracion local antes de publicar y mantener fuera del control de versiones cualquier secreto.
 - Frontend en TypeScript: el JS vive en `web/assets/ts/` y se compila a `web/assets/js/` con `npm run build:ts`.
-- Minificado: usa `npm run build` (o `node dev/scripts/minify.js` tras compilar TS) para generar `web/assets/js/*.min.js`, `web/assets/css/styles.min.css` y HTML comprimido en `web/dist/`. Las paginas ya referencian las versiones `.min` de JS y CSS.
+- Minificado/build: `npm run build` limpia `web/dist/`, compila TS, genera `*.min.js`, `styles.min.css`, HTML comprimido en `web/dist/` y copia los assets a `web/dist/assets/` para empaquetar o servir estatico (esa carpeta se ignora en git para no duplicar binarios/pesados).
 
 ## Dominios y redirecciones (ES — explicado facil)
 - La web oficial vive en `kenetg.com`. Si entras por otro dominio, se te redirige con un 301 (mudanza permanente) para que siempre aterrices en el sitio correcto.
