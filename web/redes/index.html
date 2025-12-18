@@ -4,10 +4,13 @@
   <meta charset="UTF-8" />
   <title>KenetG | Redes y directo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#05010f" />
   <meta
     name="description"
     content="Hub oficial de enlaces verificados de KenetG con el directo de Twitch integrado y acceso rapido a redes y partners."
   />
+  <meta name="keywords" content="KenetG, redes, Twitch, directo, enlaces oficiales, comunidad" />
   <link rel="canonical" href="https://kenetg.com/redes/" />
   <meta property="og:title" content="KenetG | Redes oficiales y directo" />
   <meta
@@ -17,6 +20,9 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://kenetg.com/redes/" />
   <meta property="og:image" content="https://kenetg.com/assets/img/kg-logo.png" />
+  <meta property="og:image:alt" content="Logo de KenetG con fondo neon" />
+  <meta property="og:site_name" content="KenetG" />
+  <meta property="og:locale" content="es_ES" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="KenetG | Redes oficiales y directo" />
   <meta
@@ -24,6 +30,9 @@
     content="Hub de enlaces oficiales de KenetG con Twitch en vivo, redes verificadas y partners."
   />
   <meta name="twitter:image" content="https://kenetg.com/assets/img/kg-logo.png" />
+  <meta name="twitter:image:alt" content="Logo de KenetG con fondo neon" />
+  <link rel="alternate" hreflang="es" href="https://kenetg.com/redes/" />
+  <link rel="alternate" hreflang="x-default" href="https://kenetg.com/redes/" />
   <link rel="stylesheet" href="/assets/css/styles.css" />
 </head>
 
@@ -244,10 +253,13 @@
       <section class="kg-section">
         <div class="kg-section-inner">
           <div class="kg-geo-banner" id="kg-geo-banner">
-            <p>Quieres activar geolocalizacion para mejorar la experiencia? (opcional)</p>
-            <div class="kg-geo-banner-actions">
+            <p class="kg-geo-banner-status" data-geo-status>
+              Quieres activar geolocalizacion para ajustar horarios y contenidos cercanos? (opcional)
+            </p>
+            <div class="kg-geo-banner-actions" data-geo-actions>
               <button class="kg-btn" type="button" data-geo-allow>Permitir</button>
               <button class="kg-btn-ghost" type="button" data-geo-decline>Ahora no</button>
+              <button class="kg-btn-ghost" type="button" data-geo-reset hidden>Gestionar decision</button>
             </div>
           </div>
         </div>
@@ -273,7 +285,22 @@
       "@context": "https://schema.org",
       "@graph": [
         {
+          "@type": "WebSite",
+          "@id": "https://kenetg.com/#website",
+          "name": "KenetG",
+          "url": "https://kenetg.com/",
+          "inLanguage": "es"
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://kenetg.com/#org",
+          "name": "KenetG Comunidad",
+          "url": "https://kenetg.com/",
+          "logo": "https://kenetg.com/assets/img/kg-logo.png"
+        },
+        {
           "@type": "Person",
+          "@id": "https://kenetg.com/#person",
           "name": "KenetG",
           "url": "https://kenetg.com/",
           "sameAs": [
@@ -282,6 +309,34 @@
             "https://www.instagram.com/kenetoficial",
             "https://www.tiktok.com/@kenetoficial",
             "https://x.com/_Kenet_"
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://kenetg.com/redes/#webpage",
+          "url": "https://kenetg.com/redes/",
+          "name": "KenetG | Redes y directo",
+          "description": "Hub oficial de enlaces verificados de KenetG con el directo de Twitch integrado y acceso rapido a redes y partners.",
+          "inLanguage": "es",
+          "isPartOf": { "@id": "https://kenetg.com/#website" },
+          "breadcrumb": { "@id": "https://kenetg.com/redes/#breadcrumb" }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://kenetg.com/redes/#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Inicio",
+              "item": "https://kenetg.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Redes",
+              "item": "https://kenetg.com/redes/"
+            }
           ]
         },
         {

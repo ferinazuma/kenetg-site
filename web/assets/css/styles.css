@@ -476,6 +476,7 @@ body {
   border-radius: var(--kg-radius-lg);
   border: 1px solid rgba(32, 144, 224, 0.35);
   box-shadow: 0 20px 36px rgba(0, 0, 0, 0.75);
+  transition: border-color var(--kg-transition-fast), box-shadow var(--kg-transition-fast);
 }
 
 .kg-geo-banner.is-visible {
@@ -500,6 +501,18 @@ body {
 .kg-geo-banner .kg-btn,
 .kg-geo-banner .kg-btn-ghost {
   min-width: 120px;
+}
+
+.kg-geo-banner-status {
+  line-height: 1.4;
+}
+
+.kg-geo-banner.is-status {
+  grid-template-columns: 1fr;
+}
+
+.kg-geo-banner.is-status .kg-geo-banner-actions {
+  justify-content: flex-start;
 }
 
 /* =========================================================

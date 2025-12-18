@@ -7,10 +7,13 @@
   <meta charset="UTF-8" />
   <title>KenetG | Streamer y comunidad</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#05010f" />
   <meta
     name="description"
     content="Landing oficial de KenetG: streamer, comunidad, directos en Twitch y accesos verificados a sus enlaces y drops."
   />
+  <meta name="keywords" content="KenetG, streamer, Twitch, comunidad, enlaces oficiales, drops" />
   <link rel="canonical" href="https://kenetg.com/" />
   <meta property="og:title" content="KenetG | Comunidad y directos oficiales" />
   <meta
@@ -20,6 +23,9 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://kenetg.com/" />
   <meta property="og:image" content="https://kenetg.com/assets/img/kg-logo.png" />
+  <meta property="og:image:alt" content="Logo de KenetG con fondo neon" />
+  <meta property="og:site_name" content="KenetG" />
+  <meta property="og:locale" content="es_ES" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="KenetG | Comunidad y directos oficiales" />
   <meta
@@ -27,7 +33,78 @@
     content="Landing principal de KenetG: streamer, comunidad, directos en Twitch y enlaces verificados."
   />
   <meta name="twitter:image" content="https://kenetg.com/assets/img/kg-logo.png" />
+  <meta name="twitter:image:alt" content="Logo de KenetG con fondo neon" />
+  <link rel="alternate" hreflang="es" href="https://kenetg.com/" />
+  <link rel="alternate" hreflang="x-default" href="https://kenetg.com/" />
   <link rel="stylesheet" href="/assets/css/styles.css" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://kenetg.com/#website",
+          "name": "KenetG",
+          "url": "https://kenetg.com/",
+          "inLanguage": "es",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.google.com/search?q=KenetG+{search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://kenetg.com/#org",
+          "name": "KenetG Comunidad",
+          "url": "https://kenetg.com/",
+          "logo": "https://kenetg.com/assets/img/kg-logo.png",
+          "sameAs": [
+            "https://www.twitch.tv/kenetg",
+            "https://www.youtube.com/@kenetgg",
+            "https://www.instagram.com/kenetoficial",
+            "https://www.tiktok.com/@kenetoficial",
+            "https://x.com/_Kenet_"
+          ]
+        },
+        {
+          "@type": "Person",
+          "@id": "https://kenetg.com/#person",
+          "name": "KenetG",
+          "url": "https://kenetg.com/",
+          "sameAs": [
+            "https://www.twitch.tv/kenetg",
+            "https://www.youtube.com/@kenetgg",
+            "https://www.instagram.com/kenetoficial",
+            "https://www.tiktok.com/@kenetoficial",
+            "https://x.com/_Kenet_"
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://kenetg.com/#webpage",
+          "url": "https://kenetg.com/",
+          "name": "KenetG - Streamer y comunidad",
+          "description": "Landing oficial de KenetG: streamer, comunidad, directos en Twitch y accesos verificados a sus enlaces y drops.",
+          "inLanguage": "es",
+          "isPartOf": { "@id": "https://kenetg.com/#website" },
+          "breadcrumb": { "@id": "https://kenetg.com/#breadcrumb" }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://kenetg.com/#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Inicio",
+              "item": "https://kenetg.com/"
+            }
+          ]
+        }
+      ]
+    }
+  </script>
 </head>
 
 <body>
@@ -175,10 +252,13 @@
       <section class="kg-section">
         <div class="kg-section-inner">
           <div class="kg-geo-banner" id="kg-geo-banner">
-            <p>Quieres activar geolocalizacion para mejorar la experiencia? (opcional)</p>
-            <div class="kg-geo-banner-actions">
+            <p class="kg-geo-banner-status" data-geo-status>
+              Quieres activar geolocalizacion para ajustar horarios y contenidos cercanos? (opcional)
+            </p>
+            <div class="kg-geo-banner-actions" data-geo-actions>
               <button class="kg-btn" type="button" data-geo-allow>Permitir</button>
               <button class="kg-btn-ghost" type="button" data-geo-decline>Ahora no</button>
+              <button class="kg-btn-ghost" type="button" data-geo-reset hidden>Gestionar decision</button>
             </div>
           </div>
         </div>
