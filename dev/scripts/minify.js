@@ -1,14 +1,9 @@
 const fs = require("fs");
 const path = require("path");
 
-const jsTargets = [
-  { src: path.join("web", "assets", "js", "geo.js"), dest: path.join("web", "assets", "js", "geo.min.js") },
-  { src: path.join("web", "assets", "js", "main.js"), dest: path.join("web", "assets", "js", "main.min.js") }
-];
+const jsTargets = [];
 
-const cssTargets = [
-  { src: path.join("web", "assets", "css", "styles.css"), dest: path.join("web", "assets", "css", "styles.min.css") }
-];
+const cssTargets = [];
 
 const htmlTargets = [
   path.join("web", "index.html"),
@@ -177,12 +172,7 @@ function minifyCss(code) {
 }
 
 function minifyHtml(code) {
-  const replacedAssets = code
-    .replace(/\/assets\/css\/styles\.css/g, "/assets/css/styles.min.css")
-    .replace(/\/assets\/js\/geo\.js/g, "/assets/js/geo.min.js")
-    .replace(/\/assets\/js\/main\.js/g, "/assets/js/main.min.js");
-
-  const withoutComments = replacedAssets.replace(/<!--[\s\S]*?-->/g, "");
+  const withoutComments = code.replace(/<!--[\s\S]*?-->/g, "");
   const squashed = withoutComments
     .replace(/\n+/g, " ")
     .replace(/\s{2,}/g, " ")
