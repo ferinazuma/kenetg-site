@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /errors/
+Sitemap: https://kenetg.com/sitemap.xml
