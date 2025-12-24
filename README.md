@@ -39,6 +39,7 @@ Usa los canales publicos de KenetG en redes sociales para dudas o sugerencias.
 - Produccion: el sitio estatico en `web/` se sirve mediante Nginx sin usar Docker en el entorno productivo.
 - Gestion de media: los archivos `.webm` grandes se controlan con Git LFS para no inflar el repositorio.
 - Buenas practicas: no se incluyen credenciales ni archivos `.env` en el repo; revisar configuracion local antes de publicar y mantener fuera del control de versiones cualquier secreto.
+- Prueba local allowlist: instrucciones en `infra/nginx/TEST-ALLOWLIST-LOCAL.md` para simular IPs en `/analytics-prueba/` (solo local).
 - Frontend en TypeScript: el JS vive en `web/assets/ts/` y se compila a `web/assets/js/` con `npm run build:ts`.
 - Sitemap automatizado: `npm run build:sitemap` (Python) genera `web/sitemap.xml` con rutas publicas y excluye paneles privados/noindex.
 - Minificado/build: `npm run build` ejecuta Python+Node, compila TS, genera `*.min.js`/`*.min.css`, HTML comprimido en `web/dist/` (apuntando a assets minificados) y copia los assets a `web/dist/assets/` para empaquetar o servir estatico (esa carpeta se ignora en git para no duplicar binarios/pesados).
@@ -76,6 +77,7 @@ Usa los canales publicos de KenetG en redes sociales para dudas o sugerencias.
 - Production: the static site in `web/` is served by Nginx without Docker in production.
 - Media handling: large `.webm` files are tracked with Git LFS to avoid bloating the repository.
 - Good practices: no credentials or `.env` files are kept in the repo; review local configuration before publishing and keep any secrets out of version control.
+- Local allowlist test: instructions in `infra/nginx/TEST-ALLOWLIST-LOCAL.md` to simulate IPs on `/analytics-prueba/` (local-only).
 - Sitemap automated: `npm run build:sitemap` (Python) generates `web/sitemap.xml` with public routes and excludes private/noindex panels.
 - Build/minify: `npm run build` runs Python+Node, compiles TS, emits `*.min.js`/`*.min.css`, and produces `web/dist/` pointing to minified assets.
 
