@@ -34,12 +34,14 @@
   <meta name="twitter:image:alt" content="Logo de KenetG con fondo neon" />
   <link rel="alternate" hreflang="es" href="https://kenetg.com/analytics-prueba/" />
   <link rel="alternate" hreflang="x-default" href="https://kenetg.com/analytics-prueba/" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="stylesheet" href="/assets/css/styles.css" />
   <link rel="stylesheet" href="/assets/css/analytics-prueba.css" />
 </head>
 
 <body>
-  <div class="kg-bg-video-wrap">
+  <a class="kg-skip-link" href="#main-content">Saltar al contenido</a>
+  <div class="kg-bg-video-wrap" aria-hidden="true">
     <video
       class="kg-bg-video"
       src="/assets/media/fondo-web.optimized.webm"
@@ -54,12 +56,12 @@
     <header class="kg-header">
       <a class="kg-logo-wrap" href="/" aria-label="Ir a Inicio">
         <div class="kg-logo-orbit">
-          <img src="/assets/img/kg-logo.png" alt="Logo KenetG" class="kg-logo" />
+          <img src="/assets/img/kg-logo.png" alt="Logo KenetG" class="kg-logo" width="140" height="140" decoding="async" />
         </div>
         <span class="kg-brand">Kenet<span class="kg-brand-highlight">G</span></span>
       </a>
 
-      <nav class="kg-nav">
+      <nav class="kg-nav" aria-label="Navegacion principal">
         <ul class="kg-nav-list">
           <li class="kg-nav-item">
             <a href="/" class="kg-nav-link kg-nav-link--pill">Inicio</a>
@@ -103,7 +105,7 @@
       </nav>
     </header>
 
-    <main>
+    <main id="main-content" tabindex="-1">
       <section class="kg-section">
         <div class="kg-section-inner kg-analytics-wrap">
           <div class="kg-analytics-header">

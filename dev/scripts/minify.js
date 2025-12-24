@@ -1,20 +1,50 @@
 const fs = require("fs");
 const path = require("path");
 
-const jsTargets = [];
+const distBase = path.join("web", "dist");
+const assetsBase = path.join(distBase, "assets");
 
-const cssTargets = [];
+const jsTargets = [
+  {
+    src: path.join("web", "assets", "js", "geo.js"),
+    dest: path.join(assetsBase, "js", "geo.min.js")
+  },
+  {
+    src: path.join("web", "assets", "js", "main.js"),
+    dest: path.join(assetsBase, "js", "main.min.js")
+  },
+  {
+    src: path.join("web", "assets", "js", "analytics-prueba.js"),
+    dest: path.join(assetsBase, "js", "analytics-prueba.min.js")
+  }
+];
+
+const cssTargets = [
+  {
+    src: path.join("web", "assets", "css", "styles.css"),
+    dest: path.join(assetsBase, "css", "styles.min.css")
+  },
+  {
+    src: path.join("web", "assets", "css", "analytics-prueba.css"),
+    dest: path.join(assetsBase, "css", "analytics-prueba.min.css")
+  }
+];
 
 const htmlTargets = [
   path.join("web", "index.html"),
   path.join("web", "redes", "index.html"),
+  path.join("web", "contacto", "index.html"),
   path.join("web", "tienda", "index.html"),
+  path.join("web", "analytics-prueba", "index.html"),
   path.join("web", "errors", "403.html"),
   path.join("web", "errors", "404.html"),
   path.join("web", "errors", "500.html")
 ];
 
-const distBase = path.join("web", "dist");
+const staticTargets = [
+  path.join("web", "sitemap.xml"),
+  path.join("web", "robots.txt")
+];
 
 run();
 
@@ -24,8 +54,14 @@ function run() {
   cssTargets.forEach(({ src, dest }) => writeMinified(src, dest, minifyCss));
   htmlTargets.forEach((src) => {
     const dest = path.join(distBase, path.relative("web", src));
-    writeMinified(src, dest, minifyHtml);
+    const raw = fs.readFileSync(src, "utf8");
+    const prepared = prepareHtmlForDist(raw);
+    const minified = minifyHtml(prepared);
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.writeFileSync(dest, minified, "utf8");
+    console.log(`minified: ${src} -> ${dest}`);
   });
+  copyStatic();
   copyAssets();
 }
 
@@ -41,11 +77,36 @@ function writeMinified(src, dest, transform) {
   console.log(`minified: ${src} -> ${dest}`);
 }
 
+function prepareHtmlForDist(code) {
+  let out = code;
+  out = out.replace(/\/assets\/css\/styles\.css/g, "/assets/css/styles.min.css");
+  out = out.replace(
+    /\/assets\/css\/analytics-prueba\.css/g,
+    "/assets/css/analytics-prueba.min.css"
+  );
+  out = out.replace(/\/assets\/js\/geo\.js/g, "/assets/js/geo.min.js");
+  out = out.replace(/\/assets\/js\/main\.js/g, "/assets/js/main.min.js");
+  out = out.replace(
+    /\/assets\/js\/analytics-prueba\.js/g,
+    "/assets/js/analytics-prueba.min.js"
+  );
+  return out;
+}
+
 function copyAssets() {
   const sourceAssets = path.join("web", "assets");
   const targetAssets = path.join(distBase, "assets");
   fs.cpSync(sourceAssets, targetAssets, { recursive: true });
   console.log(`copied assets -> ${targetAssets}`);
+}
+
+function copyStatic() {
+  staticTargets.forEach((src) => {
+    const dest = path.join(distBase, path.relative("web", src));
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.copyFileSync(src, dest);
+    console.log(`copied: ${src} -> ${dest}`);
+  });
 }
 
 function stripJsComments(code) {

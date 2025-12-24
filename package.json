@@ -3,9 +3,10 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
+    "build:sitemap": "python dev/scripts/generate_sitemap.py",
     "build:ts": "tsc -p tsconfig.json",
     "build:min": "node dev/scripts/minify.js",
-    "build": "npm run build:ts && npm run build:min"
+    "build": "npm run build:sitemap && npm run build:ts && npm run build:min"
   },
   "devDependencies": {
     "typescript": "^5.4.5"

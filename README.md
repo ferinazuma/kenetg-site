@@ -40,7 +40,8 @@ Usa los canales publicos de KenetG en redes sociales para dudas o sugerencias.
 - Gestion de media: los archivos `.webm` grandes se controlan con Git LFS para no inflar el repositorio.
 - Buenas practicas: no se incluyen credenciales ni archivos `.env` en el repo; revisar configuracion local antes de publicar y mantener fuera del control de versiones cualquier secreto.
 - Frontend en TypeScript: el JS vive en `web/assets/ts/` y se compila a `web/assets/js/` con `npm run build:ts`.
-- Minificado/build: `npm run build` limpia `web/dist/`, compila TS, genera `*.min.js`, `styles.min.css`, HTML comprimido en `web/dist/` y copia los assets a `web/dist/assets/` para empaquetar o servir estatico (esa carpeta se ignora en git para no duplicar binarios/pesados).
+- Sitemap automatizado: `npm run build:sitemap` (Python) genera `web/sitemap.xml` con rutas publicas y excluye paneles privados/noindex.
+- Minificado/build: `npm run build` ejecuta Python+Node, compila TS, genera `*.min.js`/`*.min.css`, HTML comprimido en `web/dist/` (apuntando a assets minificados) y copia los assets a `web/dist/assets/` para empaquetar o servir estatico (esa carpeta se ignora en git para no duplicar binarios/pesados).
 
 ## Dominios y redirecciones (ES — explicado facil)
 - La web oficial vive en `kenetg.com`. Si entras por otro dominio, se te redirige con un 301 (mudanza permanente) para que siempre aterrices en el sitio correcto.
@@ -75,6 +76,8 @@ Usa los canales publicos de KenetG en redes sociales para dudas o sugerencias.
 - Production: the static site in `web/` is served by Nginx without Docker in production.
 - Media handling: large `.webm` files are tracked with Git LFS to avoid bloating the repository.
 - Good practices: no credentials or `.env` files are kept in the repo; review local configuration before publishing and keep any secrets out of version control.
+- Sitemap automated: `npm run build:sitemap` (Python) generates `web/sitemap.xml` with public routes and excludes private/noindex panels.
+- Build/minify: `npm run build` runs Python+Node, compiles TS, emits `*.min.js`/`*.min.css`, and produces `web/dist/` pointing to minified assets.
 
 ## Domains & redirects (EN — technical)
 - Canonical domain: `kenetg.com` is the only indexable host to avoid duplicate content and concentrate SEO/GEO authority.

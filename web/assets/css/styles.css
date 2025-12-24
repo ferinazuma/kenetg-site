@@ -54,6 +54,43 @@ body {
   background: radial-gradient(circle at top, #161342 0, #05010f 55%, #000 100%);
 }
 
+/* Acceso rapido al contenido */
+.kg-skip-link {
+  position: absolute;
+  top: 0.75rem;
+  left: 1.5rem;
+  z-index: 200;
+
+  padding: 0.55rem 1rem;
+  border-radius: var(--kg-radius-pill);
+  border: 1px solid rgba(32, 144, 224, 0.85);
+
+  background: var(--kg-bg-alt);
+  color: var(--kg-text);
+  text-decoration: none;
+  font-size: 0.85rem;
+
+  transform: translateY(-160%);
+  transition: transform var(--kg-transition-fast);
+}
+
+.kg-skip-link:focus,
+.kg-skip-link:focus-visible {
+  transform: translateY(0);
+  box-shadow: 0 0 18px rgba(32, 144, 224, 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* =========================================================
    2) ESTRUCTURA GENERAL + CAPAS (VIDEO FONDO)
    ========================================================= */
@@ -238,7 +275,16 @@ body {
     0 0 28px rgba(240, 48, 112, 0.6);
 }
 
-.kg-nav-link--active {
+.kg-nav-link--pill:focus-visible {
+  outline: 2px solid rgba(32, 144, 224, 0.9);
+  outline-offset: 3px;
+  box-shadow:
+    0 0 12px rgba(32, 144, 224, 0.6),
+    0 0 18px rgba(240, 48, 112, 0.45);
+}
+
+.kg-nav-link--active,
+.kg-nav-link--pill[aria-current="page"] {
   box-shadow:
     0 0 24px rgba(32, 144, 224, 0.8),
     0 0 32px rgba(240, 48, 112, 0.8);
@@ -677,6 +723,14 @@ body {
   border-color: rgba(240, 48, 112, 0.65);
 }
 
+.kg-social-card:focus-visible {
+  outline: 2px solid rgba(32, 144, 224, 0.9);
+  outline-offset: 3px;
+  box-shadow:
+    0 0 12px rgba(32, 144, 224, 0.6),
+    0 0 18px rgba(240, 48, 112, 0.45);
+}
+
 .kg-social-card:hover::after {
   opacity: 1;
 }
@@ -862,6 +916,14 @@ body {
     0 0 26px rgba(240, 48, 112, 0.55);
 }
 
+.kg-product-solid:focus-visible {
+  outline: 2px solid rgba(32, 144, 224, 0.9);
+  outline-offset: 4px;
+  box-shadow:
+    0 0 12px rgba(32, 144, 224, 0.6),
+    0 0 18px rgba(240, 48, 112, 0.45);
+}
+
 /* =========================================================
    BADGE
    ========================================================= */
@@ -1037,6 +1099,14 @@ body {
   box-shadow:
     0 24px 46px rgba(0, 0, 0, 0.92),
     0 0 26px rgba(240, 48, 112, 0.45);
+}
+
+.kg-product-tall:focus-visible {
+  outline: 2px solid rgba(32, 144, 224, 0.9);
+  outline-offset: 4px;
+  box-shadow:
+    0 0 12px rgba(32, 144, 224, 0.6),
+    0 0 18px rgba(240, 48, 112, 0.45);
 }
 
 /* =========================================================
@@ -1229,6 +1299,15 @@ body {
   box-shadow:
     0 12px 22px rgba(0, 0, 0, 0.7),
     0 0 22px rgba(240, 48, 112, 0.6);
+}
+
+.kg-btn:focus-visible,
+.kg-btn-ghost:focus-visible {
+  outline: 2px solid rgba(32, 144, 224, 0.9);
+  outline-offset: 3px;
+  box-shadow:
+    0 0 12px rgba(32, 144, 224, 0.6),
+    0 0 18px rgba(240, 48, 112, 0.45);
 }
 
 .kg-btn-ghost {
