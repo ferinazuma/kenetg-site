@@ -10,12 +10,14 @@ Ofrecer un sitio claro y confiable donde cualquier persona pueda conocer a Kenet
 
 ### Alcance actual
 - Incluye: pagina principal, hub de redes con reproductor del directo de Twitch incrustado y una tienda de demostracion sin pagos activos.
+- Incluye tambien: `/analytics-prueba/` como panel privado con datos inventados para pruebas (sin conexion a BD ni datos reales).
 - No incluye todavia: procesamiento de pagos, blog en produccion ni panel de administracion; esas partes estan planificadas para fases futuras.
 
 ### Paginas principales
 - `/` Pagina de inicio con la presentacion y llamadas a la accion hacia redes y tienda, sin incrustaciones.
 - `/redes` Centro de enlaces oficiales con el directo de Twitch incrustado.
 - `/tienda` Catalogo de muestra (solo visual) para probar futuros productos.
+- `/analytics-prueba` Panel privado de analytics con datos simulados/inventados (solo prueba interna, no indexable).
 
 ### Como ejecutarlo en local
 - Opcion sencilla: sirve la carpeta `web/` con cualquier servidor estatico (por ejemplo, `python -m http.server 8000 -d web`) y abre `http://localhost:8000`.
@@ -31,6 +33,7 @@ Usa los canales publicos de KenetG en redes sociales para dudas o sugerencias.
 ### Detalles tecnicos (ES)
 - Estructura del repo: `web/` (sitio para produccion), `dev/` (utilidades y soporte local), `infra/` (configuracion de servidor y despliegue).
 - Rutas principales: `/` landing principal, `/redes/` hub de enlaces con embed, `/tienda/` catalogo demo sin pagos.
+- Rutas de prueba interna: `/analytics-prueba/` panel privado con datos simulados/inventados (sin datos reales ni BD).
 - SEO/GEO: metadatos de titulo y descripcion, etiqueta canonical, Open Graph y Twitter Cards, y JSON-LD basico para describir el sitio.
 - Desarrollo local: se puede servir `web/` con un servidor estatico sencillo; existe Docker Compose como opcion opcional para entornos locales.
 - Produccion: el sitio estatico en `web/` se sirve mediante Nginx sin usar Docker en el entorno productivo.
@@ -66,6 +69,7 @@ Usa los canales publicos de KenetG en redes sociales para dudas o sugerencias.
 ## Technical details (EN)
 - Repository layout: `web/` (production-ready site), `dev/` (local utilities and tooling), `infra/` (server and deployment configuration).
 - Main routes: `/` main landing, `/redes/` link hub with embed, `/tienda/` demo catalog without payments.
+- Internal test route: `/analytics-prueba/` private analytics panel with simulated/invented data (no real data or DB).
 - SEO/GEO: title and description meta tags, canonical tag, Open Graph and Twitter Cards, plus basic JSON-LD to describe the site.
 - Local development: serve `web/` with a simple static server; Docker Compose is available as an optional local setup.
 - Production: the static site in `web/` is served by Nginx without Docker in production.
