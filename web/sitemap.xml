@@ -11,6 +11,11 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
+    <loc>https://kenetg.com/contacto/</loc>
+    <priority>0.85</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://kenetg.com/tienda/</loc>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>
