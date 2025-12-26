@@ -5,13 +5,11 @@ from pathlib import Path
 
 
 BASE_URL = "https://kenetg.com"
-OUTPUT_PATH = Path("web") / "sitemap.xml"
+OUTPUT_PATH = Path("edge") / "web" / "sitemap.xml"
 
 ROUTES = [
-    ("/", "weekly", "1.0"),
     ("/redes/", "weekly", "0.9"),
     ("/contacto/", "weekly", "0.85"),
-    ("/tienda/", "weekly", "0.8"),
 ]
 
 

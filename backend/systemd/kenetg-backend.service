@@ -1,0 +1,16 @@
+[Unit]
+# Template: replace BACKEND_APP_ROOT and BACKEND_ENV_FILE.
+Description=KenetG Backend API
+After=network.target
+
+[Service]
+Type=simple
+User=kenetg
+WorkingDirectory=BACKEND_APP_ROOT/app
+EnvironmentFile=BACKEND_ENV_FILE
+ExecStart=/usr/bin/python3 BACKEND_APP_ROOT/app/server.py
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

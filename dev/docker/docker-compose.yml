@@ -5,6 +5,6 @@ services:
     ports:
       - "8080:80"                # http://localhost:8080
     volumes:
-      - ../../web:/usr/share/nginx/html:ro
-      - ../../infra/nginx/errors.conf:/etc/nginx/conf.d/default.conf:ro
+      - ../../edge/web:/usr/share/nginx/html:ro
+      - ../../edge/nginx/dev-local.conf:/etc/nginx/conf.d/default.conf:ro
     restart: unless-stopped

@@ -1,5 +1,6 @@
 # KenetG - Sitio oficial
 Version del README: v2
+Docs clave: `docs/ARCHITECTURE.md` y `docs/DEPLOY_GCP.md`.
 
 ## Version academica (ES, no tecnica)
 ### Que es este proyecto?
@@ -9,18 +10,18 @@ Es la pagina web oficial de KenetG. Sirve como punto de encuentro para su comuni
 Ofrecer un sitio claro y confiable donde cualquier persona pueda conocer a KenetG, seguir sus canales oficiales y explorar una tienda de muestra sin riesgo ni friccion.
 
 ### Alcance actual
-- Incluye: pagina principal, hub de redes con reproductor del directo de Twitch incrustado y una tienda de demostracion sin pagos activos.
+- Incluye: paginas publicas `/redes/` y `/contacto/`, assets estaticos y errores personalizados.
 - Incluye tambien: `/analytics-prueba/` como panel privado con datos inventados para pruebas (sin conexion a BD ni datos reales).
-- No incluye todavia: procesamiento de pagos, blog en produccion ni panel de administracion; esas partes estan planificadas para fases futuras.
+- No incluye todavia: pagina de inicio, tienda activa, procesamiento de pagos, blog en produccion ni panel de administracion; esas partes estan planificadas para fases futuras.
 
 ### Paginas principales
-- `/` Pagina de inicio con la presentacion y llamadas a la accion hacia redes y tienda, sin incrustaciones.
-- `/redes` Centro de enlaces oficiales con el directo de Twitch incrustado.
-- `/tienda` Catalogo de muestra (solo visual) para probar futuros productos.
+- `/redes` Centro de enlaces oficiales.
+- `/contacto` Canales oficiales de contacto.
 - `/analytics-prueba` Panel privado de analytics con datos simulados/inventados (solo prueba interna, no indexable).
+- `/` y `/tienda` estan deshabilitados (410 via Nginx).
 
 ### Como ejecutarlo en local
-- Opcion sencilla: sirve la carpeta `web/` con cualquier servidor estatico (por ejemplo, `python -m http.server 8000 -d web`) y abre `http://localhost:8000`.
+- Opcion sencilla: sirve la carpeta `edge/web/` con cualquier servidor estatico (por ejemplo, `python -m http.server 8000 -d edge/web`) y abre `http://localhost:8000/redes/`.
 - Opcion con Docker: desde la carpeta del repo, usa `docker compose up` con la configuracion incluida y accede al servicio que entregue los archivos estaticos.
 
 ### Estado del proyecto
@@ -31,18 +32,17 @@ Usa los canales publicos de KenetG en redes sociales para dudas o sugerencias.
 
 ## Version tecnica (ES)
 ### Detalles tecnicos (ES)
-- Estructura del repo: `web/` (sitio para produccion), `dev/` (utilidades y soporte local), `infra/` (configuracion de servidor y despliegue).
-- Rutas principales: `/` landing principal, `/redes/` hub de enlaces con embed, `/tienda/` catalogo demo sin pagos.
+- Estructura del repo: `edge/` (estaticos y Nginx), `backend/` (API), `db/` (schema), `docs/` (despliegue), `dev/` (utilidades).
+- Rutas principales: `/redes/` y `/contacto/` publicas; `/` y `/tienda/` deshabilitadas (410).
 - Rutas de prueba interna: `/analytics-prueba/` panel privado con datos simulados/inventados (sin datos reales ni BD).
 - SEO/GEO: metadatos de titulo y descripcion, etiqueta canonical, Open Graph y Twitter Cards, y JSON-LD basico para describir el sitio.
-- Desarrollo local: se puede servir `web/` con un servidor estatico sencillo; existe Docker Compose como opcion opcional para entornos locales.
-- Produccion: el sitio estatico en `web/` se sirve mediante Nginx sin usar Docker en el entorno productivo.
+- Desarrollo local: se puede servir `edge/web/` con un servidor estatico sencillo; existe Docker Compose como opcion opcional para entornos locales.
+- Produccion: el sitio estatico en `edge/web/` se sirve mediante Nginx en VPS1; la API corre en VPS2 sin Docker.
 - Gestion de media: los archivos `.webm` grandes se controlan con Git LFS para no inflar el repositorio.
 - Buenas practicas: no se incluyen credenciales ni archivos `.env` en el repo; revisar configuracion local antes de publicar y mantener fuera del control de versiones cualquier secreto.
-- Prueba local allowlist: instrucciones en `infra/nginx/TEST-ALLOWLIST-LOCAL.md` para simular IPs en `/analytics-prueba/` (solo local).
-- Frontend en TypeScript: el JS vive en `web/assets/ts/` y se compila a `web/assets/js/` con `npm run build:ts`.
-- Sitemap automatizado: `npm run build:sitemap` (Python) genera `web/sitemap.xml` con rutas publicas y excluye paneles privados/noindex.
-- Minificado/build: `npm run build` ejecuta Python+Node, compila TS, genera `*.min.js`/`*.min.css`, HTML comprimido en `web/dist/` (apuntando a assets minificados) y copia los assets a `web/dist/assets/` para empaquetar o servir estatico (esa carpeta se ignora en git para no duplicar binarios/pesados).
+- Frontend en TypeScript: el JS vive en `edge/web/assets/ts/` y se compila a `edge/web/assets/js/` con `npm run build:ts`.
+- Sitemap automatizado: `npm run build:sitemap` (Python) genera `edge/web/sitemap.xml` con rutas publicas.
+- Minificado/build: `npm run build` ejecuta Python+Node, compila TS y genera `edge/web/dist/` (no se commitea).
 
 ## Dominios y redirecciones (ES — explicado facil)
 - La web oficial vive en `kenetg.com`. Si entras por otro dominio, se te redirige con un 301 (mudanza permanente) para que siempre aterrices en el sitio correcto.
@@ -54,38 +54,37 @@ Usa los canales publicos de KenetG en redes sociales para dudas o sugerencias.
 - Dominio canonico: `kenetg.com` es el unico indexable para evitar contenido duplicado y consolidar autoridad SEO/GEO.
 - Redirecciones 301 deseadas:
   - `kenetg.gg/redes` -> `https://kenetg.com/redes/` (alias para el comando `!redes`).
-  - `kenetg.store/` -> `https://kenetg.com/tienda/` (alias de la tienda).
+- `kenetg.store/` -> pendiente (tienda deshabilitada por ahora).
   - `kenetg.es/` -> `https://kenetg.com/` (alias general, a la espera de estrategia multi-idioma).
 - Buenas practicas: siempre HTTPS, coherencia con la barra final `/`, usar etiquetas `canonical` en las paginas, y definir las redirecciones 301 en el proveedor de DNS/hosting o en Nginx (sin exponer configuraciones sensibles).
 
 ## Paginas de error personalizadas
 - Que son: paginas que explican errores habituales: 404 (no encontrada), 403 (acceso denegado) y 500 (error interno).
-- Donde estan: en `web/errors/` (archivos `404.html`, `403.html` y `500.html`).
+- Donde estan: en `edge/web/errors/` (archivos `404.html`, `403.html` y `500.html`).
 - Diseno: mantienen el mismo estilo visual, header y fondo de video que el resto del sitio.
 
 ### Detalles tecnicos - errores
 - Rutas: `/errors/404.html`, `/errors/403.html`, `/errors/500.html`.
 - Enlace desde Nginx (conceptual): usar `error_page 404 /errors/404.html;` (igual para 403 y 500) dentro del bloque del sitio; sin credenciales ni IPs.
-- Uso local: se pueden abrir directamente en el navegador o servir la carpeta `web/` con un servidor estatico para verlas integradas.
+- Uso local: se pueden abrir directamente en el navegador o servir la carpeta `edge/web/` con un servidor estatico para verlas integradas.
 
 ## Technical details (EN)
-- Repository layout: `web/` (production-ready site), `dev/` (local utilities and tooling), `infra/` (server and deployment configuration).
-- Main routes: `/` main landing, `/redes/` link hub with embed, `/tienda/` demo catalog without payments.
+- Repository layout: `edge/` (static + Nginx), `backend/` (API), `db/` (schema), `docs/` (deployment), `dev/` (local utilities).
+- Main routes: `/redes/` and `/contacto/` public; `/` and `/tienda/` disabled (410).
 - Internal test route: `/analytics-prueba/` private analytics panel with simulated/invented data (no real data or DB).
 - SEO/GEO: title and description meta tags, canonical tag, Open Graph and Twitter Cards, plus basic JSON-LD to describe the site.
-- Local development: serve `web/` with a simple static server; Docker Compose is available as an optional local setup.
-- Production: the static site in `web/` is served by Nginx without Docker in production.
+- Local development: serve `edge/web/` with a simple static server; Docker Compose is available as an optional local setup.
+- Production: the static site in `edge/web/` is served by Nginx on the edge VM; the API runs on the backend VM without Docker.
 - Media handling: large `.webm` files are tracked with Git LFS to avoid bloating the repository.
 - Good practices: no credentials or `.env` files are kept in the repo; review local configuration before publishing and keep any secrets out of version control.
-- Local allowlist test: instructions in `infra/nginx/TEST-ALLOWLIST-LOCAL.md` to simulate IPs on `/analytics-prueba/` (local-only).
-- Sitemap automated: `npm run build:sitemap` (Python) generates `web/sitemap.xml` with public routes and excludes private/noindex panels.
-- Build/minify: `npm run build` runs Python+Node, compiles TS, emits `*.min.js`/`*.min.css`, and produces `web/dist/` pointing to minified assets.
+- Sitemap automated: `npm run build:sitemap` (Python) generates `edge/web/sitemap.xml` with public routes.
+- Build/minify: `npm run build` runs Python+Node, compiles TS, and produces `edge/web/dist/` (not committed).
 
 ## Domains & redirects (EN — technical)
 - Canonical domain: `kenetg.com` is the only indexable host to avoid duplicate content and concentrate SEO/GEO authority.
 - Target 301 redirects:
   - `kenetg.gg/redes` -> `https://kenetg.com/redes/` (alias for the `!redes` command).
-  - `kenetg.store/` -> `https://kenetg.com/tienda/` (store alias).
+- `kenetg.store/` -> pending (store disabled for now).
   - `kenetg.es/` -> `https://kenetg.com/` (general alias until a multi-language strategy is defined).
 - Best practices: enforce HTTPS, keep trailing slashes consistent, set `canonical` tags on pages, and configure the 301s at the DNS/hosting provider or in Nginx (without exposing sensitive configuration).
 

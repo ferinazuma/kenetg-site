@@ -3,8 +3,8 @@
     "target": "ES2019",
     "module": "None",
     "lib": ["DOM", "ES2019"],
-    "rootDir": "./web/assets/ts",
-    "outDir": "./web/assets/js",
+    "rootDir": "./edge/web/assets/ts",
+    "outDir": "./edge/web/assets/js",
     "strict": true,
     "noImplicitAny": true,
     "noEmitOnError": true,
@@ -12,5 +12,5 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["web/assets/ts/**/*"]
+  "include": ["edge/web/assets/ts/**/*"]
 }

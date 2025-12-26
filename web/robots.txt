@@ -1,5 +1,0 @@
-User-agent: *
-Disallow: /analytics-prueba/
-Disallow: /dist/
-Disallow: /errors/
-Sitemap: https://kenetg.com/sitemap.xml

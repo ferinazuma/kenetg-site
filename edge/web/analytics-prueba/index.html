@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>KenetG | Analytics (Prueba)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="googlebot" content="noindex,nofollow" />
+  <meta name="theme-color" content="#05010f" />
+  <meta
+    name="description"
+    content="Panel privado de analytics con datos simulados estilo Instagram Insights."
+  />
+  <meta name="keywords" content="KenetG, analytics, pruebas, mock, insights" />
+  <link rel="canonical" href="https://kenetg.com/analytics-prueba/" />
+  <meta property="og:title" content="KenetG | Analytics (Prueba)" />
+  <meta
+    property="og:description"
+    content="Panel privado con datos simulados para pruebas internas de analytics."
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://kenetg.com/analytics-prueba/" />
+  <meta property="og:image" content="https://kenetg.com/assets/img/kg-logo.png" />
+  <meta property="og:image:alt" content="Logo de KenetG con fondo neon" />
+  <meta property="og:site_name" content="KenetG" />
+  <meta property="og:locale" content="es_ES" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="KenetG | Analytics (Prueba)" />
+  <meta
+    name="twitter:description"
+    content="Panel privado de analytics con datos simulados estilo Instagram Insights."
+  />
+  <meta name="twitter:image" content="https://kenetg.com/assets/img/kg-logo.png" />
+  <meta name="twitter:image:alt" content="Logo de KenetG con fondo neon" />
+  <link rel="alternate" hreflang="es" href="https://kenetg.com/analytics-prueba/" />
+  <link rel="alternate" hreflang="x-default" href="https://kenetg.com/analytics-prueba/" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="stylesheet" href="/assets/css/analytics-prueba.css" />
+</head>
+
+<body>
+  <a class="kg-skip-link" href="#main-content">Saltar al contenido</a>
+  <div class="kg-bg-video-wrap" aria-hidden="true">
+    <video
+      class="kg-bg-video"
+      src="/assets/media/fondo-web.optimized.webm"
+      autoplay
+      muted
+      loop
+      playsinline
+    ></video>
+  </div>
+
+  <div class="kg-page">
+    <header class="kg-header">
+      <a class="kg-logo-wrap" href="/redes/" aria-label="Ir a Redes">
+        <div class="kg-logo-orbit">
+          <img src="/assets/img/kg-logo.png" alt="Logo KenetG" class="kg-logo" width="140" height="140" decoding="async" />
+        </div>
+        <span class="kg-brand">Kenet<span class="kg-brand-highlight">G</span></span>
+      </a>
+
+      <nav class="kg-nav" aria-label="Navegacion principal">
+        <ul class="kg-nav-list">
+          <li class="kg-nav-item">
+            <a href="/redes/" class="kg-nav-link kg-nav-link--pill">Redes</a>
+          </li>
+
+          <li class="kg-nav-item">
+            <a href="/contacto/" class="kg-nav-link kg-nav-link--pill">Contacto</a>
+          </li>
+
+
+          <li class="kg-nav-item kg-nav-item--has-sub">
+            <span class="kg-nav-link kg-nav-link--pill kg-nav-link--disabled">
+              Blog (proximamente, deshabilitado)
+            </span>
+            <ul class="kg-submenu">
+              <li>
+                <span class="kg-submenu-link kg-submenu-link--disabled">
+                  Articulos en camino
+                </span>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+      <section class="kg-section">
+        <div class="kg-section-inner kg-analytics-wrap">
+          <div class="kg-analytics-header">
+            <p class="kg-section-kicker">Panel privado</p>
+            <h1>Analytics (Prueba)</h1>
+            <p class="kg-analytics-subtitle">Datos simulados estilo Instagram Insights (mock)</p>
+          </div>
+
+          <div class="kg-analytics-controls">
+            <div class="kg-analytics-control">
+              <label for="analytics-range">Rango</label>
+              <select id="analytics-range" class="kg-analytics-select">
+                <option value="7">7 dias</option>
+                <option value="30" selected>30 dias</option>
+                <option value="90">90 dias</option>
+              </select>
+            </div>
+
+            <div class="kg-analytics-control">
+              <label for="analytics-format">Formato</label>
+              <select id="analytics-format" class="kg-analytics-select">
+                <option value="all" selected>Todo</option>
+                <option value="reels">Reels</option>
+                <option value="posts">Posts</option>
+                <option value="stories">Stories</option>
+              </select>
+            </div>
+
+            <div class="kg-analytics-actions">
+              <button class="kg-btn" type="button" id="analytics-regenerate">Regenerar datos</button>
+            </div>
+          </div>
+
+          <div class="kg-analytics-grid">
+            <article class="kg-analytics-card">
+              <p class="kg-analytics-card-label">Seguidores</p>
+              <div class="kg-analytics-card-value" id="analytics-followers-total">-</div>
+              <div class="kg-analytics-card-meta" id="analytics-followers-delta">-</div>
+            </article>
+
+            <article class="kg-analytics-card">
+              <p class="kg-analytics-card-label">Alcance</p>
+              <div class="kg-analytics-card-value" id="analytics-reach-average">-</div>
+              <div class="kg-analytics-card-meta">Media diaria</div>
+            </article>
+
+            <article class="kg-analytics-card">
+              <p class="kg-analytics-card-label">Interacciones</p>
+              <div class="kg-analytics-card-value" id="analytics-interactions-total">-</div>
+              <div class="kg-analytics-card-meta">Likes + comentarios + compartidos</div>
+            </article>
+
+            <article class="kg-analytics-card">
+              <p class="kg-analytics-card-label">Mejor hora</p>
+              <div class="kg-analytics-card-value" id="analytics-best-hour">-</div>
+              <div class="kg-analytics-card-meta">Promedio semanal</div>
+            </article>
+          </div>
+
+          <div class="kg-analytics-panels">
+            <article class="kg-analytics-panel">
+              <h3>Seguidores (crecimiento)</h3>
+              <div class="kg-analytics-chart">
+                <canvas id="analytics-followers-chart" role="img" aria-label="Grafica de crecimiento de seguidores"></canvas>
+              </div>
+            </article>
+
+            <article class="kg-analytics-panel">
+              <h3>Alcance por formato</h3>
+              <div class="kg-analytics-chart">
+                <canvas id="analytics-reach-chart" role="img" aria-label="Grafica de alcance por formato"></canvas>
+              </div>
+            </article>
+
+            <article class="kg-analytics-panel">
+              <h3>Engagement rate (%)</h3>
+              <div class="kg-analytics-chart">
+                <canvas id="analytics-engagement-chart" role="img" aria-label="Grafica de engagement rate"></canvas>
+              </div>
+            </article>
+
+            <article class="kg-analytics-panel">
+              <h3>Publicaciones por dia</h3>
+              <div class="kg-analytics-chart">
+                <canvas id="analytics-posts-chart" role="img" aria-label="Grafica de publicaciones por dia"></canvas>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="kg-footer">
+      <p>Proyecto preliminar para <strong>KenetG</strong>. Sitio en construccion.</p>
+    </footer>
+  </div>
+
+  <script src="/assets/js/geo.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/assets/js/analytics-prueba.js"></script>
+</body>
+</html>
