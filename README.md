@@ -1,92 +1,170 @@
 # KenetG - Sitio oficial
-Version del README: v2
+Version del README: v4
 Docs clave: `docs/ARCHITECTURE.md` y `docs/DEPLOY_GCP.md`.
 
 ## Version academica (ES, no tecnica)
 ### Que es este proyecto?
-Es la pagina web oficial de KenetG. Sirve como punto de encuentro para su comunidad, reune enlaces verificados a sus redes y muestra un catalogo de ejemplo para futuros productos.
+Es el sitio oficial de KenetG. Su objetivo es dar acceso a enlaces verificados y canales oficiales, evitando confusiones o enlaces falsos.
 
 ### Objetivo del proyecto
-Ofrecer un sitio claro y confiable donde cualquier persona pueda conocer a KenetG, seguir sus canales oficiales y explorar una tienda de muestra sin riesgo ni friccion.
+Ofrecer una experiencia clara, segura y rapida para la comunidad, con paginas publicas simples y sin dependencia de datos sensibles.
 
 ### Alcance actual
 - Incluye: paginas publicas `/redes/` y `/contacto/`, assets estaticos y errores personalizados.
-- Incluye tambien: `/analytics-prueba/` como panel privado con datos inventados para pruebas (sin conexion a BD ni datos reales).
-- No incluye todavia: pagina de inicio, tienda activa, procesamiento de pagos, blog en produccion ni panel de administracion; esas partes estan planificadas para fases futuras.
+- Incluye tambien: `/analytics-prueba/` como panel privado con datos simulados (sin BD real).
+- Incluye una API interna minima para salud del sistema.
+- No incluye todavia: inicio, tienda activa, login, pagos, blog en produccion ni panel de admin.
 
 ### Paginas principales
 - `/redes` Centro de enlaces oficiales.
 - `/contacto` Canales oficiales de contacto.
-- `/analytics-prueba` Panel privado de analytics con datos simulados/inventados (solo prueba interna, no indexable).
+- `/analytics-prueba` Panel privado con datos simulados (no indexable).
+- `/disabled` Pagina informativa de secciones deshabilitadas.
 - `/` y `/tienda` estan deshabilitados (410 via Nginx).
 
+### Como navegar
+- Para usuarios: entrar directo a `/redes/` y `/contacto/`.
+- Para pruebas internas: usar `/analytics-prueba/` (no se indexa).
+- Si alguien entra a `/` o `/tienda/` vera un aviso de deshabilitado.
+
 ### Como ejecutarlo en local
-- Opcion sencilla: sirve la carpeta `edge/web/` con cualquier servidor estatico (por ejemplo, `python -m http.server 8000 -d edge/web`) y abre `http://localhost:8000/redes/`.
-- Opcion con Docker: desde la carpeta del repo, usa `docker compose up` con la configuracion incluida y accede al servicio que entregue los archivos estaticos.
+- Opcion sencilla: `python -m http.server 8080 -d edge/web` y abrir `http://localhost:8080/redes/`.
+- Opcion con Docker: `docker compose -f dev/docker/docker-compose.yml up` y abrir `http://localhost:8080/redes/`.
 
 ### Estado del proyecto
-En construccion activa: contenidos, tienda y secciones nuevas pueden cambiar mientras se recogen pruebas y feedback.
+En construccion activa; algunas secciones estan deshabilitadas por seguridad y foco en despliegue.
 
 ### Contacto
-Usa los canales publicos de KenetG en redes sociales para dudas o sugerencias.
+Usa los canales publicos de KenetG en redes sociales.
 
 ## Version tecnica (ES)
 ### Detalles tecnicos (ES)
-- Estructura del repo: `edge/` (estaticos y Nginx), `backend/` (API), `db/` (schema), `docs/` (despliegue), `dev/` (utilidades).
-- Rutas principales: `/redes/` y `/contacto/` publicas; `/` y `/tienda/` deshabilitadas (410).
-- Rutas de prueba interna: `/analytics-prueba/` panel privado con datos simulados/inventados (sin datos reales ni BD).
-- SEO/GEO: metadatos de titulo y descripcion, etiqueta canonical, Open Graph y Twitter Cards, y JSON-LD basico para describir el sitio.
-- Desarrollo local: se puede servir `edge/web/` con un servidor estatico sencillo; existe Docker Compose como opcion opcional para entornos locales.
-- Produccion: el sitio estatico en `edge/web/` se sirve mediante Nginx en VPS1; la API corre en VPS2 sin Docker.
-- Gestion de media: los archivos `.webm` grandes se controlan con Git LFS para no inflar el repositorio.
-- Buenas practicas: no se incluyen credenciales ni archivos `.env` en el repo; revisar configuracion local antes de publicar y mantener fuera del control de versiones cualquier secreto.
-- Frontend en TypeScript: el JS vive en `edge/web/assets/ts/` y se compila a `edge/web/assets/js/` con `npm run build:ts`.
-- Sitemap automatizado: `npm run build:sitemap` (Python) genera `edge/web/sitemap.xml` con rutas publicas.
-- Minificado/build: `npm run build` ejecuta Python+Node, compila TS y genera `edge/web/dist/` (no se commitea).
+- Arquitectura: 2 VPS (EDGE publica + BACKEND privada) y DB privada.
+- EDGE sirve solo estaticos y actua como proxy para `/api/`.
+- BACKEND ejecuta la API y se conecta a la DB por red privada.
+- No hay secretos en el frontend.
 
-## Dominios y redirecciones (ES — explicado facil)
-- La web oficial vive en `kenetg.com`. Si entras por otro dominio, se te redirige con un 301 (mudanza permanente) para que siempre aterrices en el sitio correcto.
-- Esto evita enlaces falsos, concentra todo en la web oficial y mantiene la experiencia ordenada.
-- El comando `!redes` del bot de Twitch usa una URL corta (`kenetg.gg/redes`) que envia automaticamente a `https://kenetg.com/redes/`.
-- Ejemplo: escribes `kenetg.gg/redes`, el navegador te lleva a `https://kenetg.com/redes/` y ves los enlaces oficiales.
+### Estructura del repo
+- `edge/` estaticos, Nginx y scripts de deploy del EDGE.
+- `backend/` API, systemd y scripts de deploy del BACKEND.
+- `db/` esquema SQL inicial.
+- `docs/` arquitectura y despliegue en GCP.
+- `dev/` utilidades locales.
 
-## Dominios y redirecciones (ES — tecnico)
-- Dominio canonico: `kenetg.com` es el unico indexable para evitar contenido duplicado y consolidar autoridad SEO/GEO.
+### Rutas y estado
+- Publicas: `/redes/`, `/contacto/`.
+- Deshabilitadas: `/` y `/tienda/` (410).
+- Internas de prueba: `/analytics-prueba/` (noindex).
+- Error pages: `/errors/403.html`, `/errors/404.html`, `/errors/500.html`.
+- Pagina de seccion deshabilitada: `/disabled/`.
+
+### API (BACKEND)
+- Endpoint base: `/api/health`.
+- Stubs preparados: `/api/analytics` y `/api/blog`.
+- Sin login habilitado.
+- Binding controlado por `BACKEND_BIND_HOST` y `BACKEND_PORT`.
+
+### Despliegue (resumen)
+- VPS1: clonar repo, configurar `edge/.env.example` -> `/etc/kenetg/edge.env`, ejecutar `edge/scripts/deploy.sh`.
+- VPS2: clonar repo, configurar `backend/.env.example` -> `/etc/kenetg/backend.env`, ejecutar `backend/scripts/deploy.sh`.
+- DB: usar `db/schema.sql` como base.
+
+### Variables de entorno (sin datos sensibles)
+- EDGE: `EDGE_WEB_ROOT`, `EDGE_SERVER_NAME`, `BACKEND_PRIVATE_IP`, `BACKEND_PORT`.
+- BACKEND: `BACKEND_BIND_HOST`, `BACKEND_PORT`, `DB_*`, `PUBLIC_BASE_URL`.
+- Los archivos reales van fuera del repo.
+
+### Build y desarrollo local
+- TS -> JS: `npm run build:ts`.
+- Sitemap: `npm run build:sitemap`.
+- Build completo: `npm run build` (genera `edge/web/dist/` y no se commitea).
+- Local sin Docker: `python -m http.server 8080 -d edge/web`.
+- Local con Docker: `docker compose -f dev/docker/docker-compose.yml up`.
+
+### Archivos clave
+- Nginx EDGE: `edge/nginx/kenetg-edge.conf`.
+- Nginx local: `edge/nginx/dev-local.conf`.
+- systemd backend: `backend/systemd/kenetg-backend.service`.
+- API: `backend/app/server.py`.
+- Schema DB: `db/schema.sql`.
+
+### Buenas practicas
+- No subir `.env` reales.
+- No hardcodear IPs internas en el frontend.
+- Probar cambios en local antes de subir.
+- Mantener `/` y `/tienda/` fuera de la navegacion.
+
+### Problemas comunes (local)
+- 404 en `/redes/`: verifica que estas sirviendo `edge/web` y no `web`.
+- Docker 404: recrea el contenedor (`docker compose ... down` y `up --force-recreate`).
+- Si `/` responde 410, es esperado.
+
+## Dominios y redirecciones (ES)
+- Dominio canonico: `kenetg.com`.
 - Redirecciones 301 deseadas:
-  - `kenetg.gg/redes` -> `https://kenetg.com/redes/` (alias para el comando `!redes`).
-- `kenetg.store/` -> pendiente (tienda deshabilitada por ahora).
-  - `kenetg.es/` -> `https://kenetg.com/` (alias general, a la espera de estrategia multi-idioma).
-- Buenas practicas: siempre HTTPS, coherencia con la barra final `/`, usar etiquetas `canonical` en las paginas, y definir las redirecciones 301 en el proveedor de DNS/hosting o en Nginx (sin exponer configuraciones sensibles).
+  - `kenetg.gg/redes` -> `https://kenetg.com/redes/`.
+  - `kenetg.es/` -> `https://kenetg.com/`.
+  - `kenetg.store/` -> pendiente (tienda deshabilitada).
 
 ## Paginas de error personalizadas
-- Que son: paginas que explican errores habituales: 404 (no encontrada), 403 (acceso denegado) y 500 (error interno).
-- Donde estan: en `edge/web/errors/` (archivos `404.html`, `403.html` y `500.html`).
-- Diseno: mantienen el mismo estilo visual, header y fondo de video que el resto del sitio.
-
-### Detalles tecnicos - errores
-- Rutas: `/errors/404.html`, `/errors/403.html`, `/errors/500.html`.
-- Enlace desde Nginx (conceptual): usar `error_page 404 /errors/404.html;` (igual para 403 y 500) dentro del bloque del sitio; sin credenciales ni IPs.
-- Uso local: se pueden abrir directamente en el navegador o servir la carpeta `edge/web/` con un servidor estatico para verlas integradas.
+- 403, 404, 500 en `edge/web/errors/`.
+- 410 (seccion deshabilitada) en `edge/web/disabled/`.
+- Integradas via `error_page` en Nginx.
 
 ## Technical details (EN)
-- Repository layout: `edge/` (static + Nginx), `backend/` (API), `db/` (schema), `docs/` (deployment), `dev/` (local utilities).
-- Main routes: `/redes/` and `/contacto/` public; `/` and `/tienda/` disabled (410).
-- Internal test route: `/analytics-prueba/` private analytics panel with simulated/invented data (no real data or DB).
-- SEO/GEO: title and description meta tags, canonical tag, Open Graph and Twitter Cards, plus basic JSON-LD to describe the site.
-- Local development: serve `edge/web/` with a simple static server; Docker Compose is available as an optional local setup.
-- Production: the static site in `edge/web/` is served by Nginx on the edge VM; the API runs on the backend VM without Docker.
-- Media handling: large `.webm` files are tracked with Git LFS to avoid bloating the repository.
-- Good practices: no credentials or `.env` files are kept in the repo; review local configuration before publishing and keep any secrets out of version control.
-- Sitemap automated: `npm run build:sitemap` (Python) generates `edge/web/sitemap.xml` with public routes.
-- Build/minify: `npm run build` runs Python+Node, compiles TS, and produces `edge/web/dist/` (not committed).
+- Architecture: 2 VMs (public EDGE + private BACKEND) and private DB.
+- EDGE serves static files and proxies `/api/` to BACKEND.
+- BACKEND runs the API and talks to the DB over private network.
+- No secrets live in the frontend.
 
-## Domains & redirects (EN — technical)
-- Canonical domain: `kenetg.com` is the only indexable host to avoid duplicate content and concentrate SEO/GEO authority.
-- Target 301 redirects:
-  - `kenetg.gg/redes` -> `https://kenetg.com/redes/` (alias for the `!redes` command).
-- `kenetg.store/` -> pending (store disabled for now).
-  - `kenetg.es/` -> `https://kenetg.com/` (general alias until a multi-language strategy is defined).
-- Best practices: enforce HTTPS, keep trailing slashes consistent, set `canonical` tags on pages, and configure the 301s at the DNS/hosting provider or in Nginx (without exposing sensitive configuration).
+### Repo layout
+- `edge/` static site, Nginx, edge deploy scripts.
+- `backend/` API, systemd, backend deploy scripts.
+- `db/` initial SQL schema.
+- `docs/` architecture and GCP deployment.
+- `dev/` local utilities.
+
+### Routes and status
+- Public: `/redes/`, `/contacto/`.
+- Disabled: `/` and `/tienda/` (410).
+- Internal test: `/analytics-prueba/` (noindex).
+- Error pages: `/errors/403.html`, `/errors/404.html`, `/errors/500.html`.
+- Disabled page: `/disabled/`.
+
+### API (BACKEND)
+- Base endpoint: `/api/health`.
+- Prepared stubs: `/api/analytics` and `/api/blog`.
+- Login is disabled.
+- Binding via `BACKEND_BIND_HOST` and `BACKEND_PORT`.
+
+### Deployment (summary)
+- EDGE: clone repo, copy `edge/.env.example` to `/etc/kenetg/edge.env`, run `edge/scripts/deploy.sh`.
+- BACKEND: clone repo, copy `backend/.env.example` to `/etc/kenetg/backend.env`, run `backend/scripts/deploy.sh`.
+- DB: bootstrap with `db/schema.sql`.
+
+### Env vars (safe overview)
+- EDGE: `EDGE_WEB_ROOT`, `EDGE_SERVER_NAME`, `BACKEND_PRIVATE_IP`, `BACKEND_PORT`.
+- BACKEND: `BACKEND_BIND_HOST`, `BACKEND_PORT`, `DB_*`, `PUBLIC_BASE_URL`.
+- Real env files live outside the repo.
+
+### Build and local dev
+- TS -> JS: `npm run build:ts`.
+- Sitemap: `npm run build:sitemap`.
+- Full build: `npm run build` (generates `edge/web/dist/`, not committed).
+- Local without Docker: `python -m http.server 8080 -d edge/web`.
+- Local with Docker: `docker compose -f dev/docker/docker-compose.yml up`.
+
+### Key files
+- EDGE Nginx: `edge/nginx/kenetg-edge.conf`.
+- Local Nginx: `edge/nginx/dev-local.conf`.
+- Backend systemd: `backend/systemd/kenetg-backend.service`.
+- API server: `backend/app/server.py`.
+- DB schema: `db/schema.sql`.
+
+### Common local issues
+- 404 on `/redes/`: make sure you serve `edge/web`.
+- Docker 404: recreate the container (`docker compose ... down` then `up --force-recreate`).
+- 410 on `/`: expected by design.
 
 ## Changelog
-- v2: Anadida explicacion de dominios/redirecciones, uso de `!redes` y documentacion de paginas de error personalizadas.
+- v4: README reescrito desde cero con la nueva arquitectura EDGE/BACKEND.
